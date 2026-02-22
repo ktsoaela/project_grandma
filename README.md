@@ -131,6 +131,54 @@ cd project-grandma; npm run dev
 
 ---
 
+## Build Executable (Windows & macOS)
+
+### Build for Windows
+
+```bash
+cd project-grandma
+npm run build:win
+```
+
+**Note:** Must run in **Administrator** mode (right-click PowerShell → Run as Administrator)
+
+Creates in `dist/`:
+- **NSIS Installer** (`Project-Grandma-1.0.0.exe`) - Full installer with uninstaller
+- **Portable EXE** (`Project-Grandma-1.0.0-portable.exe`) - Single executable, no installation needed
+- **Unpacked Folder** (`win-unpacked/Project Grandma.exe`) - Direct executable to run
+
+### Build for macOS
+
+```bash
+cd project-grandma
+npm run build:mac
+```
+
+Creates in `dist/`:
+- **DMG** (recommended) - Disk image for installation
+- **ZIP** - Compressed app bundle
+
+### Build for Both Platforms
+
+```bash
+cd project-grandma
+npm run build:all
+```
+
+**Note:** Works on macOS only. For cross-platform builds on Windows, build Windows first, then use a Mac to build macOS version.
+
+### Run the Built Executable
+
+After building on Windows, you can run the app directly:
+```bash
+cd project-grandma/dist/win-unpacked
+"Project Grandma.exe"
+```
+
+Or install via the NSIS installer when available.
+
+---
+
 ## How to Use (Grandma Style)
 
 ### Choose Options (Before Starting)
