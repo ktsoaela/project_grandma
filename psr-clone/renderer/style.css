@@ -1,0 +1,172 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+  color: #333;
+  background: #f0f0f0;
+  -webkit-app-region: no-drag;
+}
+
+.app {
+  padding: 14px 18px;
+  min-height: 240px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.header {
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.title {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.content {
+  min-height: 120px;
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settings-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-row label {
+  flex: 1 1 100%;
+  font-size: 12px;
+  color: #555;
+}
+
+.settings-row.export-formats label,
+.settings-row .label-inline + label {
+  flex: none;
+}
+
+.label-inline {
+  font-size: 12px;
+  color: #555;
+  margin-right: 4px;
+}
+
+.input-small {
+  width: 48px;
+  padding: 4px 6px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+#max-screenshots {
+  width: 64px;
+  padding: 6px 8px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #0078d4;
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #106ebe;
+}
+
+.btn-secondary {
+  background: #e5e5e5;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #d5d5d5;
+}
+
+.btn-stop {
+  background: #c42b1c;
+}
+
+.btn-stop:hover:not(:disabled) {
+  background: #a82418;
+}
+
+.step-count {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.step-count span {
+  font-weight: 600;
+  color: #0078d4;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.save-dialog {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #ccc;
+}
+
+.save-dialog p {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #333;
+}
+
+.save-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.save-buttons .save-btn {
+  flex: none;
+}

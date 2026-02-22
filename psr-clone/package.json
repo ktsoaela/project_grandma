@@ -1,0 +1,36 @@
+{
+  "name": "psr-clone",
+  "version": "1.0.0",
+  "description": "Steps Recorder - PSR clone (record steps to reproduce a problem)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "start:electron": "electron .",
+    "start:python": "node scripts/start-recorder.js",
+    "dev": "concurrently -n js,py -c blue,green \"npm run start:electron\" \"npm run start:python\"",
+    "build": "electron-builder"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.psrclone.steps-recorder",
+    "productName": "Steps Recorder",
+    "directories": {
+      "output": "dist"
+    },
+    "extraResources": [
+      {
+        "from": "../recorder",
+        "to": "recorder",
+        "filter": [
+          "**/*.py"
+        ]
+      }
+    ]
+  }
+}

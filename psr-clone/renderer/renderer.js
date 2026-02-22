@@ -1,0 +1,109 @@
+const idleState = document.getElementById('idle-state');
+const recordingState = document.getElementById('recording-state');
+const saveDialog = document.getElementById('save-dialog');
+const saveButtons = document.getElementById('save-buttons');
+const btnStart = document.getElementById('btn-start');
+const btnStop = document.getElementById('btn-stop');
+const btnAddComment = document.getElementById('btn-add-comment');
+const stepCountEl = document.getElementById('step-count');
+const maxScreenshotsInput = document.getElementById('max-screenshots');
+const recordVideoCheck = document.getElementById('record-video');
+const videoFpsInput = document.getElementById('video-fps');
+const exportHtmlCheck = document.getElementById('export-html');
+const exportPdfCheck = document.getElementById('export-pdf');
+const exportMdCheck = document.getElementById('export-md');
+
+let pollInterval = null;
+
+function showState(idle, recording, showSave) {
+  idleState.classList.toggle('hidden', !idle);
+  recordingState.classList.toggle('hidden', !recording);
+  saveDialog.classList.toggle('hidden', !showSave);
+}
+
+function updateStepCount(n) {
+  stepCountEl.textContent = String(n);
+}
+
+async function pollState() {
+  try {
+    const state = await window.recorderAPI.getState();
+    if (state.recording) updateStepCount(state.step_count || 0);
+  } catch (_) {}
+}
+
+btnStart.addEventListener('click', async () => {
+  const max = parseInt(maxScreenshotsInput.value, 10) || 25;
+  const recordVideo = recordVideoCheck.checked;
+  const videoFps = parseInt(videoFpsInput.value, 10) || 3;
+  btnStart.disabled = true;
+  try {
+    await window.recorderAPI.start({
+      maxScreenshots: max,
+      recordVideo,
+      videoFps,
+    });
+    showState(false, true, false);
+    updateStepCount(0);
+    pollInterval = setInterval(pollState, 800);
+  } catch (e) {
+    alert('Could not start recorder. Is Python installed? Run: pip install -r recorder/requirements.txt');
+    btnStart.disabled = false;
+    return;
+  }
+  btnStart.disabled = false;
+});
+
+btnStop.addEventListener('click', async () => {
+  if (pollInterval) {
+    clearInterval(pollInterval);
+    pollInterval = null;
+  }
+  const exportFormats = [];
+  if (exportHtmlCheck.checked) exportFormats.push('html');
+  if (exportPdfCheck.checked) exportFormats.push('pdf');
+  if (exportMdCheck.checked) exportFormats.push('md');
+  if (exportFormats.length === 0) exportFormats.push('html');
+  btnStop.disabled = true;
+  try {
+    const result = await window.recorderAPI.stop(exportFormats);
+    showState(false, false, true);
+    const paths = result && result.paths ? result.paths : (result && result.path ? { html: result.path } : {});
+    saveButtons.innerHTML = '';
+    const labels = { html: 'Open HTML', pdf: 'Open PDF', md: 'Open Markdown', video: 'Open video' };
+    for (const [key, path] of Object.entries(paths)) {
+      if (path) {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-secondary save-btn';
+        btn.textContent = labels[key] || key;
+        btn.onclick = () => window.recorderAPI.openReport(path);
+        saveButtons.appendChild(btn);
+      }
+    }
+  } catch (_) {}
+  btnStop.disabled = false;
+});
+
+btnAddComment.addEventListener('click', () => {
+  const text = prompt('Add a comment (e.g. typed text or note):');
+  if (text != null) window.recorderAPI.addComment(text);
+});
+
+document.querySelector('.btn-done').addEventListener('click', () => {
+  showState(true, false, false);
+});
+
+(async () => {
+  try {
+    const state = await window.recorderAPI.getState();
+    if (state.recording) {
+      showState(false, true, false);
+      updateStepCount(state.step_count || 0);
+      pollInterval = setInterval(pollState, 800);
+    } else {
+      showState(true, false, false);
+    }
+  } catch (_) {
+    showState(true, false, false);
+  }
+})();

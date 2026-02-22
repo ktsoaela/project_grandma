@@ -1,0 +1,8 @@
+pynput>=1.7.6
+mss>=9.0.0
+flask>=3.0.0
+Pillow>=10.0.0
+uiautomation>=2.0.20
+reportlab>=4.0.0
+imageio>=2.31.0
+imageio-ffmpeg>=0.4.9
