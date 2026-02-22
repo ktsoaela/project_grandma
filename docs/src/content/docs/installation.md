@@ -18,7 +18,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
     </ul>
 </TabItem>
 <TabItem label="macOS">
-    <ul>
+    <ul>`
         <li><strong>OS</strong>: macOS 10.12 or later</li>
         <li><strong>Processor</strong>: Intel or Apple Silicon</li>
         <li><strong>Memory</strong>: 4GB RAM (8GB recommended)</li>
