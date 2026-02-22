@@ -47,7 +47,7 @@ Additional info may include:
 
 ---
 
-## 🍪 Prerequisites
+## Prerequisites
 
 Before starting, make sure you have:
 
@@ -56,7 +56,7 @@ Before starting, make sure you have:
 
 ---
 
-## 🚀 Setup
+## Setup
 
 ### Install Node dependencies (Electron)
 
@@ -179,7 +179,7 @@ Examples:
 
 ---
 
-### 5️⃣ Open and Share
+### Open and Share
 
 Use the Open buttons to launch:
 
