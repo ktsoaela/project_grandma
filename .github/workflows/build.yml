@@ -1,0 +1,106 @@
+name: Build Project Grandma
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        working-directory: ./grandama
+        run: npm install
+      
+      - name: Build Windows executable
+        working-directory: ./grandama
+        run: npm run build:win
+      
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-builds
+          path: grandama/dist/*.exe
+          retention-days: 30
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        working-directory: ./grandama
+        run: npm install
+      
+      - name: Build macOS app
+        working-directory: ./grandama
+        run: npm run build:mac
+      
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-builds
+          path: grandama/dist/*.{dmg,zip}
+          retention-days: 30
+
+  create-release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Download Windows builds
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-builds
+          path: ./dist/windows
+      
+      - name: Download macOS builds
+        uses: actions/download-artifact@v3
+        with:
+          name: macos-builds
+          path: ./dist/macos
+      
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Project Grandma ${{ github.ref }}
+          body_path: .github/release-template.md
+          draft: false
+          prerelease: false
+      
+      - name: Upload Windows Release Assets
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: dist/windows/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload macOS Release Assets
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: dist/macos/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

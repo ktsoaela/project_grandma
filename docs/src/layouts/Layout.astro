@@ -1,0 +1,12 @@
+---
+export const prerender = true;
+
+import Layout from '@astrojs/starlight/layouts/Layout.astro';
+import type { Props } from '@astrojs/starlight/lib/props';
+
+const { entry } = Astro.props;
+---
+
+<Layout {...Astro.props}>
+	<slot />
+</Layout>

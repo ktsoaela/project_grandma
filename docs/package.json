@@ -1,0 +1,16 @@
+{
+  "name": "project-grandma-docs",
+  "version": "1.0.0",
+  "description": "Project Grandma Documentation",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.37.6",
+    "astro": "^5.6.1",
+    "sharp": "^0.34.2"
+  }
+}
