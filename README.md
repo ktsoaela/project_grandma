@@ -1,5 +1,9 @@
 # Project Grandma
 
+<div align="center">
+  <img src="./assets/old-woman-c.png" alt="Project Grandma" width="120" height="120">
+</div>
+
 A simple step recorder designed for explaining tasks clearly — like showing your grandma how to do something, one step at a time.
 
 **Project Grandma** captures screenshots on every click and lets you add helpful notes, so anyone can follow along easily.
@@ -210,5 +214,9 @@ Now you can send it to anyone who needs step-by-step help
 Inspired by Microsoft’s Problem Steps Recorder:
 
 `C:\Windows\System32\psr.exe`
+
+
+image:
+https://www.flaticon.com/free-icon/old-woman_3544776?related_id=3544852&origin=search
 
 But friendlier. Simpler. Grandma-approved.

@@ -10,10 +10,10 @@ const RECORDER_PORT = 37482;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 420,
-    height: 280,
-    minWidth: 380,
-    minHeight: 240,
+    width: 520,
+    height: 500,
+    minWidth: 500,
+    minHeight: 480,
     title: 'Steps Recorder',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
