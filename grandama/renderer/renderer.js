@@ -12,8 +12,15 @@ const videoFpsInput = document.getElementById('video-fps');
 const exportHtmlCheck = document.getElementById('export-html');
 const exportPdfCheck = document.getElementById('export-pdf');
 const exportMdCheck = document.getElementById('export-md');
+const captureTypedTextCheck = document.getElementById('capture-typed-text');
+const privacyWarning = document.getElementById('privacy-warning');
 
 let pollInterval = null;
+
+// Privacy toggle: show/hide warning when "Show typed text" is toggled
+captureTypedTextCheck.addEventListener('change', () => {
+  privacyWarning.classList.toggle('visible', captureTypedTextCheck.checked);
+});
 
 function showState(idle, recording, showSave) {
   idleState.classList.toggle('hidden', !idle);
@@ -29,25 +36,38 @@ async function pollState() {
   try {
     const state = await window.recorderAPI.getState();
     if (state.recording) updateStepCount(state.step_count || 0);
-  } catch (_) {}
+  } catch (_) { }
 }
 
 btnStart.addEventListener('click', async () => {
   const max = parseInt(maxScreenshotsInput.value, 10) || 25;
   const recordVideo = recordVideoCheck.checked;
   const videoFps = parseInt(videoFpsInput.value, 10) || 3;
+  const captureTypedText = captureTypedTextCheck.checked;
   btnStart.disabled = true;
   try {
     await window.recorderAPI.start({
       maxScreenshots: max,
       recordVideo,
       videoFps,
+      captureTypedText,
     });
     showState(false, true, false);
     updateStepCount(0);
     pollInterval = setInterval(pollState, 800);
   } catch (e) {
-    alert('Could not start recorder. Is Python installed? Run: pip install -r recorder/requirements.txt');
+    const errorMsg = e?.message || e?.toString() || '';
+    let alertMsg = 'Could not start recorder.';
+    
+    if (errorMsg.includes('ENOENT') || errorMsg.includes('not found')) {
+      alertMsg += '\n\nMake sure the app was built correctly:\n1. Run: npm run build:recorder\n2. Run: npm run build:mac';
+    } else if (errorMsg.includes('Python')) {
+      alertMsg += '\n\nPython is not installed or recorder dependencies are missing:\nRun: pip install -r recorder/requirements.txt';
+    } else {
+      alertMsg += '\n\nError: ' + errorMsg;
+    }
+    
+    alert(alertMsg);
     btnStart.disabled = false;
     return;
   }
@@ -80,7 +100,7 @@ btnStop.addEventListener('click', async () => {
         saveButtons.appendChild(btn);
       }
     }
-  } catch (_) {}
+  } catch (_) { }
   btnStop.disabled = false;
 });
 
@@ -91,6 +111,22 @@ btnAddComment.addEventListener('click', () => {
 
 document.querySelector('.btn-done').addEventListener('click', () => {
   showState(true, false, false);
+});
+
+// Click circle effect during recording
+document.addEventListener('click', (e) => {
+  // Only show circle when recording
+  if (recordingState.classList.contains('hidden')) return;
+  
+  const circle = document.createElement('div');
+  circle.className = 'click-circle';
+  circle.style.left = e.clientX + 'px';
+  circle.style.top = e.clientY + 'px';
+  
+  document.body.appendChild(circle);
+  
+  // Remove circle after animation completes
+  setTimeout(() => circle.remove(), 600);
 });
 
 (async () => {

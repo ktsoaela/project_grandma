@@ -50,7 +50,9 @@ def start():
     max_screenshots = data.get('max_screenshots', 25)
     record_video = data.get('record_video', False)
     video_fps = max(1, min(10, data.get('video_fps', 3)))
-    capture = StepCapture(on_step=_step_callback, max_screenshots=max_screenshots)
+    capture_typed_text = data.get('capture_typed_text', False)
+    capture = StepCapture(on_step=_step_callback, max_screenshots=max_screenshots,
+                          capture_typed_text=capture_typed_text)
     capture.start()
     _video_path = None
     if record_video:

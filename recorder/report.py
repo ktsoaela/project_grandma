@@ -254,7 +254,8 @@ function zoomToggle(num) {
             ver = program.get('version', '')
             company = program.get('company', '')
             exe = program.get('exe', '')
-            parts.append(f'Program: {_escape(name)}, {_escape(ver)}, {_escape(company)}, {_escape(exe)}, {_escape(exe)}<br />')
+            exe_path = program.get('exe_path', '')
+            parts.append(f'Program: {_escape(name)}, {_escape(ver)}, {_escape(company)}, {_escape(exe)}, {_escape(exe_path)}<br />')
         if ui_elements:
             parts.append(f'UI Elements: {", ".join(_escape(u) for u in ui_elements)}<br />')
         parts.append('<br />')

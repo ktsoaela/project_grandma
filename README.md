@@ -268,3 +268,13 @@ image:
 https://www.flaticon.com/free-icon/old-woman_3544776?related_id=3544852&origin=search
 
 But friendlier. Simpler. Grandma-approved.
+
+
+
+-----
+for mac
+allow input 
+allow screen recording
+allow accessoris to connect/controll your computer
+
+dasdasd

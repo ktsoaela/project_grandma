@@ -4,6 +4,10 @@ const fs = require('fs');
 const { spawn } = require('child_process');
 const http = require('http');
 
+// Enable macOS accessibility so the recorder can detect UI elements (buttons, etc.)
+// Without this, Electron/Chromium doesn't expose AXTitle/AXLabel to the recorder
+app.commandLine.appendSwitch('force-renderer-accessibility');
+
 let mainWindow = null;
 let pythonProcess = null;
 const RECORDER_PORT = 37482;
@@ -28,7 +32,23 @@ function createWindow() {
   mainWindow.setMenuBarVisibility(false);
 }
 
-function getRecorderPath() {
+function getRecorderExecutablePath() {
+  // Check for bundled standalone executable first (no Python dependency)
+  const isDev = !app.isPackaged;
+  const execName = process.platform === 'win32' ? 'recorder-server.exe' : 'recorder-server';
+  
+  let execPath;
+  if (isDev) {
+    execPath = path.join(__dirname, '..', 'recorder', 'dist', 'executable', execName);
+  } else {
+    execPath = path.join(process.resourcesPath, 'recorder', execName);
+  }
+  
+  return fs.existsSync(execPath) ? execPath : null;
+}
+
+function getRecorderPythonPath() {
+  // Fallback: use Python script if executable not available
   const isDev = !app.isPackaged;
   if (isDev) {
     return path.join(__dirname, '..', 'recorder', 'server.py');
@@ -73,9 +93,23 @@ function startPythonRecorder() {
     .then(() => Promise.resolve())
     .catch(() => {
       return new Promise((resolve, reject) => {
-        const scriptPath = getRecorderPath();
-        pythonProcess = spawn(getPythonExecutable(), [scriptPath, String(RECORDER_PORT)], {
-          cwd: path.dirname(scriptPath),
+        const executablePath = getRecorderExecutablePath();
+        let command, args, cwd;
+        
+        if (executablePath) {
+          // Use bundled standalone executable (no Python dependency)
+          command = executablePath;
+          args = [String(RECORDER_PORT)];
+          cwd = path.dirname(executablePath);
+        } else {
+          // Fallback to Python script
+          command = getPythonExecutable();
+          args = [getRecorderPythonPath(), String(RECORDER_PORT)];
+          cwd = path.dirname(getRecorderPythonPath());
+        }
+        
+        pythonProcess = spawn(command, args, {
+          cwd,
           stdio: ['ignore', 'pipe', 'pipe'],
         });
         let stderr = '';
@@ -106,6 +140,10 @@ function stopPythonRecorder() {
 }
 
 app.whenReady().then(() => {
+  // Explicitly enable accessibility tree for macOS (helps recorder detect button names, etc.)
+  if (typeof app.setAccessibilitySupportEnabled === 'function') {
+    app.setAccessibilitySupportEnabled(true);
+  }
   createWindow();
 
   ipcMain.handle('recorder:start', async (_, options) => {
@@ -115,6 +153,7 @@ app.whenReady().then(() => {
       max_screenshots: opts.maxScreenshots ?? 25,
       record_video: opts.recordVideo === true,
       video_fps: opts.videoFps ?? 3,
+      capture_typed_text: opts.captureTypedText === true,
     });
   });
 
@@ -134,7 +173,7 @@ app.whenReady().then(() => {
   });
 
   ipcMain.handle('recorder:openReport', async (_, filePath) => {
-    if (filePath) shell.openPath(filePath).catch(() => {});
+    if (filePath) shell.openPath(filePath).catch(() => { });
   });
 });
 

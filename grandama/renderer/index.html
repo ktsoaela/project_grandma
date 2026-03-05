@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Steps Recorder</title>
+  <title>Grandma Steps</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="app">
     <header class="header">
-      <h1 class="title">Steps Recorder</h1>
+      <h1 class="title">Grandma Steps</h1>
       <p class="subtitle">Record steps to reproduce a problem</p>
     </header>
 
@@ -17,20 +19,29 @@
       <div id="idle-state" class="state">
         <div class="settings-row">
           <label for="max-screenshots">Number of recent screen captures to store:</label>
-          <input type="number" id="max-screenshots" min="1" max="999" value="25">
+          <input type="number" id="max-screenshots" min="1" max="999" value="25"
+            aria-label="Number of screen captures to store">
         </div>
         <div class="settings-row">
-          <label><input type="checkbox" id="record-video" /> Record video (MP4)</label>
+          <label><input type="checkbox" id="record-video" aria-label="Record video as MP4" /> Record video (MP4)</label>
           <span class="label-inline">FPS:</span>
-          <input type="number" id="video-fps" min="1" max="10" value="3" class="input-small">
+          <input type="number" id="video-fps" min="1" max="10" value="3" class="input-small"
+            aria-label="Video frames per second">
         </div>
         <div class="settings-row export-formats">
           <span class="label-inline">Export:</span>
-          <label><input type="checkbox" id="export-html" checked /> HTML</label>
-          <label><input type="checkbox" id="export-pdf" /> PDF</label>
-          <label><input type="checkbox" id="export-md" /> Markdown</label>
+          <label><input type="checkbox" id="export-html" checked aria-label="Export as HTML" /> HTML</label>
+          <label><input type="checkbox" id="export-pdf" aria-label="Export as PDF" /> PDF</label>
+          <label><input type="checkbox" id="export-md" aria-label="Export as Markdown" /> Markdown</label>
         </div>
-        <button id="btn-start" class="btn btn-primary">Start Record</button>
+        <div class="settings-row privacy-row">
+          <label class="privacy-label" for="capture-typed-text">
+            <input type="checkbox" id="capture-typed-text" aria-label="Show typed text in recording" />
+            <span>Show typed text</span>
+          </label>
+          <span class="privacy-warning" id="privacy-warning">Passwords and sensitive text will be recorded</span>
+        </div>
+        <button id="btn-start" class="btn btn-primary" aria-label="Start Record">Start Record</button>
       </div>
 
       <div id="recording-state" class="state hidden">
@@ -38,8 +49,8 @@
           <span id="step-count">0</span> steps recorded
         </div>
         <div class="actions">
-          <button id="btn-add-comment" class="btn btn-secondary">Add Comment</button>
-          <button id="btn-stop" class="btn btn-primary btn-stop">Stop Record</button>
+          <button id="btn-add-comment" class="btn btn-secondary" aria-label="Add Comment">Add Comment</button>
+          <button id="btn-stop" class="btn btn-primary btn-stop" aria-label="Stop Record">Stop Record</button>
         </div>
       </div>
     </div>
@@ -47,9 +58,10 @@
     <div id="save-dialog" class="save-dialog hidden">
       <p>Recording saved.</p>
       <div id="save-buttons" class="save-buttons"></div>
-      <button type="button" class="btn btn-secondary btn-done">Done</button>
+      <button type="button" class="btn btn-secondary btn-done" aria-label="Done">Done</button>
     </div>
   </div>
   <script src="renderer.js"></script>
 </body>
+
 </html>

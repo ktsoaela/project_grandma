@@ -13,10 +13,11 @@
     "start:electron": "electron .",
     "start:python": "node scripts/start-recorder.js",
     "dev": "concurrently -n js,py -c blue,green \"npm run start:electron\" \"npm run start:python\"",
+    "build:recorder": "bash ../recorder/build_executable.sh",
     "build": "electron-builder",
-    "build:win": "electron-builder --win --publish=never",
-    "build:mac": "electron-builder --mac --publish=never",
-    "build:all": "electron-builder -mw --publish=never"
+    "build:win": "npm run build:recorder && electron-builder --win --publish=never",
+    "build:mac": "npm run build:recorder && electron-builder --mac --publish=never",
+    "build:all": "npm run build:recorder && electron-builder -mw --publish=never"
   },
   "author": "",
   "license": "MIT",
@@ -45,7 +46,8 @@
         "to": "recorder",
         "filter": [
           "**/*.py",
-          "requirements.txt"
+          "requirements.txt",
+          "dist/**/*"
         ]
       }
     ],
