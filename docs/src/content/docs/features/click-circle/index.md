@@ -1,4 +1,7 @@
-# Click Circle Feature - Documentation Index
+---
+title: Click Circle - Documentation Index
+description: Complete documentation index for the Click Circle feature
+---
 
 Welcome to the complete documentation for Project Grandma's **Click Circle Feature**. This documentation covers everything from quick customization to deep implementation details.
 
@@ -6,7 +9,7 @@ Welcome to the complete documentation for Project Grandma's **Click Circle Featu
 
 ## 📚 Documentation Files
 
-### 1. **[CLICK_CIRCLE_QUICK_REFERENCE.md](CLICK_CIRCLE_QUICK_REFERENCE.md)** ⚡
+### 1. **[Quick Reference](/features/click-circle/quick-reference/)** ⚡
 **Best for**: Quick lookups and fast changes
 
 - TL;DR changes
@@ -18,7 +21,7 @@ Welcome to the complete documentation for Project Grandma's **Click Circle Featu
 
 ---
 
-### 2. **[CLICK_CIRCLE_FEATURE.md](CLICK_CIRCLE_FEATURE.md)** 📖
+### 2. **[Feature Guide](/features/click-circle/feature/)** 📖
 **Best for**: Understanding how it all works
 
 - Complete overview
@@ -31,7 +34,7 @@ Welcome to the complete documentation for Project Grandma's **Click Circle Featu
 
 ---
 
-### 3. **[CLICK_CIRCLE_VISUAL_GUIDE.md](CLICK_CIRCLE_VISUAL_GUIDE.md)** 🎨
+### 3. **[Visual Guide](/features/click-circle/visual-guide/)** 🎨
 **Best for**: Visual learners and design decisions
 
 - Size comparisons
@@ -44,7 +47,7 @@ Welcome to the complete documentation for Project Grandma's **Click Circle Featu
 
 ---
 
-### 4. **[CLICK_CIRCLE_IMPLEMENTATION.md](CLICK_CIRCLE_IMPLEMENTATION.md)** 🔧
+### 4. **[Implementation Guide](/features/click-circle/implementation/)** 🔧
 **Best for**: Developers and technical deep dives
 
 - Architecture overview
@@ -61,22 +64,22 @@ Welcome to the complete documentation for Project Grandma's **Click Circle Featu
 ## 🚀 Quick Start by Use Case
 
 ### "I want to change the color"
-→ Go to [QUICK_REFERENCE.md](CLICK_CIRCLE_QUICK_REFERENCE.md) → Section "Change Circle Color"
+→ Go to [Quick Reference](/features/click-circle/quick-reference/) → Section "Change Circle Color"
 
 ### "I want to make the circle bigger"
-→ Go to [QUICK_REFERENCE.md](CLICK_CIRCLE_QUICK_REFERENCE.md) → Section "Change Circle Size"
+→ Go to [Quick Reference](/features/click-circle/quick-reference/) → Section "Change Circle Size"
 
 ### "I want to see examples of different styles"
-→ Go to [VISUAL_GUIDE.md](CLICK_CIRCLE_VISUAL_GUIDE.md) → Section "Complete Configuration Examples"
+→ Go to [Visual Guide](/features/click-circle/visual-guide/) → Section "Complete Configuration Examples"
 
 ### "I want to understand how it works"
-→ Go to [FEATURE.md](CLICK_CIRCLE_FEATURE.md) → Section "How It Works"
+→ Go to [Feature Guide](/features/click-circle/feature/) → Section "How It Works"
 
 ### "I want to debug or modify the code"
-→ Go to [IMPLEMENTATION.md](CLICK_CIRCLE_IMPLEMENTATION.md) → Section "Frontend/Backend Implementation"
+→ Go to [Implementation Guide](/features/click-circle/implementation/) → Section "Frontend/Backend Implementation"
 
 ### "I'm creating documentation for others"
-→ Go to [FEATURE.md](CLICK_CIRCLE_FEATURE.md) → All sections
+→ Go to [Feature Guide](/features/click-circle/feature/) → All sections
 
 ---
 
@@ -146,11 +149,7 @@ circle_radius = 25
 ```
 project_grandma-DEV/
 ├── docs/
-│   ├── CLICK_CIRCLE_FEATURE.md          (← Comprehensive guide)
-│   ├── CLICK_CIRCLE_QUICK_REFERENCE.md  (← Quick changes)
-│   ├── CLICK_CIRCLE_VISUAL_GUIDE.md     (← Visual examples)
-│   ├── CLICK_CIRCLE_IMPLEMENTATION.md   (← Code deep dive)
-│   └── CLICK_CIRCLE_INDEX.md            (← You are here)
+│   └── src/content/docs/features/click-circle/  (← Documentation)
 │
 ├── grandama/
 │   └── renderer/
@@ -192,7 +191,7 @@ Border: 2px
 Speed: 0.5s
 ```
 
-See [VISUAL_GUIDE.md](CLICK_CIRCLE_VISUAL_GUIDE.md) for more styles.
+See [Visual Guide](/features/click-circle/visual-guide/) for more styles.
 
 ---
 
@@ -235,7 +234,7 @@ See [VISUAL_GUIDE.md](CLICK_CIRCLE_VISUAL_GUIDE.md) for more styles.
 - Check: Same hex code in **both** style.css and capture.py
 - Check: Have you rebuilt? `npm run build:mac`
 
-See [FEATURE.md](CLICK_CIRCLE_FEATURE.md#troubleshooting) for more solutions.
+See [Feature Guide - Troubleshooting](/features/click-circle/feature/#troubleshooting) for more solutions.
 
 ---
 
@@ -256,47 +255,47 @@ A: Yes! The frontend circle already removes itself after 0.6s. The backend circl
 ### Q: How do I match circle size between platforms?
 A: Use proportional sizing: `radius = width ÷ 2`
 
-See [FEATURE.md](CLICK_CIRCLE_FEATURE.md) for complete FAQ.
+See [Feature Guide](/features/click-circle/feature/) for complete FAQ.
 
 ---
 
 ## 🚀 Getting Started
 
 ### For Non-Developers (Just want to customize)
-1. Read: [QUICK_REFERENCE.md](CLICK_CIRCLE_QUICK_REFERENCE.md)
+1. Read: [Quick Reference](/features/click-circle/quick-reference/)
 2. Pick a customization from "Popular Customizations"
 3. Copy the code examples
 4. Paste into the appropriate files
 5. Run: `npm run build:mac`
 
 ### For Developers (Want to understand/modify)
-1. Read: [FEATURE.md](CLICK_CIRCLE_FEATURE.md) overview
-2. Review: [IMPLEMENTATION.md](CLICK_CIRCLE_IMPLEMENTATION.md) architecture
-3. Reference: [VISUAL_GUIDE.md](CLICK_CIRCLE_VISUAL_GUIDE.md) for design considerations
-4. Debug: Use testing checklist in IMPLEMENTATION.md
+1. Read: [Feature Guide](/features/click-circle/feature/) overview
+2. Review: [Implementation Guide](/features/click-circle/implementation/) architecture
+3. Reference: [Visual Guide](/features/click-circle/visual-guide/) for design considerations
+4. Debug: Use testing checklist in Implementation Guide
 
 ---
 
 ## 📚 Full Documentation Hierarchy
 
 ```
-CLICK_CIRCLE_INDEX (You are here)
-├── QUICK_REFERENCE
+Click Circle Index (You are here)
+├── Quick Reference
 │   ├── TL;DR changes
 │   ├── Popular styles
 │   └── Quick copy-paste
-├── FEATURE
+├── Feature Guide
 │   ├── Overview
 │   ├── How it works
 │   ├── Complete customization guide
 │   └── Troubleshooting
-├── VISUAL_GUIDE
+├── Visual Guide
 │   ├── Size variations
 │   ├── Border variations
 │   ├── Color psychology
 │   ├── Configuration examples
 │   └── Device-specific recommendations
-└── IMPLEMENTATION
+└── Implementation Guide
     ├── Architecture
     ├── Frontend code walkthrough
     ├── Backend code walkthrough
@@ -316,43 +315,4 @@ CLICK_CIRCLE_INDEX (You are here)
 
 ---
 
-## 📞 Support & Updates
-
-### If something doesn't work:
-1. Check the specific documentation file for your use case
-2. Review the troubleshooting section
-3. Add debug logging using examples from IMPLEMENTATION.md
-4. Verify both files were edited (frontend AND backend)
-
-### To extend the feature:
-- Master the IMPLEMENTATION.md guide
-- Use the architecture diagram to understand the data flow
-- Add custom conditions in the click handler
-- Test using the manual testing checklist
-
----
-
-## ✅ Customization Checklist
-
-Before rebuilding after changes:
-- [ ] Both files edited (style.css AND capture.py)
-- [ ] Same color used in both places (if changing color)
-- [ ] Size proportionally correct (radius = width ÷ 2)
-- [ ] No syntax errors in code
-- [ ] Saved all files
-- [ ] Ready to rebuild
-
----
-
-## 🎓 Learning Path
-
-**Beginner** → Quick Reference → Feature Overview → Visual Guide
-
-**Intermediate** → Feature Guide → Visual Guide → Implementation Basics
-
-**Advanced** → Full Implementation → Code Walkthrough → Debugging
-
----
-
-Start with [CLICK_CIRCLE_QUICK_REFERENCE.md](CLICK_CIRCLE_QUICK_REFERENCE.md) for immediate customization, or [CLICK_CIRCLE_FEATURE.md](CLICK_CIRCLE_FEATURE.md) for comprehensive understanding!
-
+Start with [Quick Reference](/features/click-circle/quick-reference/) for immediate customization, or [Feature Guide](/features/click-circle/feature/) for comprehensive understanding!

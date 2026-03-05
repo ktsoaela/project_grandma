@@ -1,4 +1,7 @@
-# Click Circle Feature Documentation
+---
+title: Click Circle Feature Guide
+description: How the Click Circle feature works and how to customize it
+---
 
 ## Overview
 

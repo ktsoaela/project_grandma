@@ -1,4 +1,7 @@
-# Click Circle - Complete Implementation Guide
+---
+title: Click Circle - Implementation Guide
+description: Architecture and code walkthrough for developers
+---
 
 ## Table of Contents
 
@@ -15,36 +18,28 @@
 
 The click circle feature is implemented in two separate layers:
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                  USER INTERFACE LAYER                   │
-│              (Electron App - Immediate Feedback)         │
-│                                                         │
-│  - grandama/renderer/renderer.js    (Click Detection)    │
-│  - grandama/renderer/style.css      (Animation)          │
-│                                                         │
-│  Shows animated circle for 0.6 seconds                  │
-│  (UI feedback only, not captured)                       │
-└─────────────────────────────────────────────────────────┘
-                          ⬇ Click event
-┌─────────────────────────────────────────────────────────┐
-│                RECORDING LAYER                          │
-│         (Python Backend - Permanent Record)             │
-│                                                         │
-│  - recorder/capture.py              (Screenshot Drawing) │
-│                                                         │
-│  Draws circle on captured screenshots                   │
-│  (Permanently visible in exports)                       │
-└─────────────────────────────────────────────────────────┘
-                          ⬇ Screenshot
-┌─────────────────────────────────────────────────────────┐
-│                    OUTPUTS                              │
-│                                                         │
-│  - HTML Report (with circles on images)                 │
-│  - PDF Report (with circles on images)                  │
-│  - MP4 Video (with circles on each frame)               │
-│  - Markdown (with circles on images)                    │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+  subgraph UI["USER INTERFACE LAYER (Electron)"]
+    A[grandama/renderer/renderer.js - Click Detection]
+    B[grandama/renderer/style.css - Animation]
+    C[Shows animated circle 0.6s - UI only]
+  end
+
+  subgraph REC["RECORDING LAYER (Python)"]
+    D[recorder/capture.py - Screenshot Drawing]
+    E[Draws circle on captured screenshots]
+  end
+
+  subgraph OUT["OUTPUTS"]
+    F[HTML Report]
+    G[PDF Report]
+    H[MP4 Video]
+    I[Markdown]
+  end
+
+  UI -->|Click event| REC
+  REC -->|Screenshot with circle| OUT
 ```
 
 ---
@@ -305,24 +300,27 @@ def _on_click(self, x, y, button, pressed):
 
 ### Flow Diagram
 
-```
-User clicks at (500, 300)
-         ⬇
-[Frontend JS] Detects click, shows UI circle
-         ⬇
-[pynput mouse listener] Intercepts click
-         ⬇
-[Python _on_click()] Gets coordinates (500, 300)
-         ⬇
-[_take_screenshot()] Takes screenshot, draws circle at (500, 300)
-         ⬇
-[PIL ImageDraw] Renders green circle on image
-         ⬇
-[Base64 encode] Converts to base64 PNG
-         ⬇
-[Python _add_step()] Stores image with step description
-         ⬇
-[Report generator] Includes image (with circle) in HTML/PDF/MP4
+```mermaid
+sequenceDiagram
+  participant User
+  participant Frontend as Frontend JS
+  participant Pynput as pynput listener
+  participant Python as Python _on_click()
+  participant Screenshot as _take_screenshot()
+  participant PIL as PIL ImageDraw
+  participant Report as Report generator
+
+  User->>Frontend: Clicks at (500, 300)
+  Frontend->>Frontend: Shows UI circle
+  User->>Pynput: Click event
+  Pynput->>Python: Coordinates (500, 300)
+  Python->>Screenshot: click_x, click_y
+  Screenshot->>PIL: Draw circle on image
+  PIL->>Screenshot: PNG with circle
+  Screenshot->>Python: Base64 PNG
+  Python->>Python: _add_step(desc, img)
+  Python->>Report: Step + image
+  Report->>Report: HTML/PDF/MP4 with circle
 ```
 
 ---
@@ -548,4 +546,3 @@ npm run build:mac
 | Size mismatch | UI circle and screenshot circle look different | UI width ÷ 2 = backend radius |
 | Forgot to rebuild | Changes don't appear in built app | Run `npm run build:mac` |
 | Didn't rebuild recorder | Backend changes don't apply | Run `npm run build:recorder` first |
-

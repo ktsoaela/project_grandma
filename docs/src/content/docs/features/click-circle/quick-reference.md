@@ -1,4 +1,7 @@
-# Click Circle - Quick Reference Guide
+---
+title: Click Circle - Quick Reference
+description: TL;DR changes for color, size, border, and animation
+---
 
 ## TL;DR - Quick Changes
 

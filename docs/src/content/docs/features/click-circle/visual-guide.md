@@ -1,4 +1,7 @@
-# Click Circle - Visual Customization Guide
+---
+title: Click Circle - Visual Guide
+description: Visual examples and configuration options for the click circle
+---
 
 ## Overview
 

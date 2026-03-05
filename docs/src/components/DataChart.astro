@@ -1,0 +1,76 @@
+---
+/**
+ * DataChart – Chart.js wrapper for Starlight docs.
+ * Use in MDX: <DataChart type="bar" labels={['A','B']} data={[1,2]} title="My Chart" />
+ */
+export interface Props {
+  type: 'bar' | 'line' | 'pie' | 'doughnut';
+  labels: string[];
+  data: number[];
+  title?: string;
+  id?: string;
+}
+
+const { type, labels, data, title, id = `chart-${Math.random().toString(36).slice(2, 11)}` } = Astro.props;
+const config = JSON.stringify({ type, labels, data, id });
+---
+
+<div class="chart-wrapper not-content" data-chart-config={config}>
+  {title && <p class="chart-title">{title}</p>}
+  <div class="chart-container">
+    <canvas id={id}></canvas>
+  </div>
+</div>
+
+<script>
+  import { Chart, registerables } from 'chart.js/auto';
+  Chart.register(...registerables);
+
+  function initCharts() {
+    document.querySelectorAll('.chart-wrapper[data-chart-config]').forEach((wrapper) => {
+      const cfg = JSON.parse((wrapper as HTMLElement).dataset.chartConfig || '{}');
+      const el = document.getElementById(cfg.id);
+      if (!el || (el as HTMLCanvasElement).getContext === undefined) return;
+      const ctx = (el as HTMLCanvasElement).getContext('2d');
+      if (!ctx) return;
+
+      const isPieLike = cfg.type === 'pie' || cfg.type === 'doughnut';
+      new Chart(ctx, {
+        type: cfg.type,
+        data: {
+          labels: cfg.labels,
+          datasets: [{
+            label: isPieLike ? undefined : 'Value',
+            data: cfg.data,
+            backgroundColor: isPieLike
+              ? ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0']
+              : 'rgba(76, 175, 80, 0.7)',
+            borderColor: isPieLike ? '#fff' : 'rgba(76, 175, 80, 1)',
+            borderWidth: 1,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 2,
+          plugins: { legend: { display: isPieLike } },
+          scales: isPieLike ? {} : { y: { beginAtZero: true } },
+        },
+      });
+
+      (wrapper as HTMLElement).removeAttribute('data-chart-config');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCharts);
+  } else {
+    initCharts();
+  }
+</script>
+
+<style>
+  .chart-wrapper { margin: 1.5rem 0; }
+  .chart-title { font-weight: 600; margin-bottom: 0.5rem; }
+  .chart-container { max-width: 100%; height: 280px; }
+</style>

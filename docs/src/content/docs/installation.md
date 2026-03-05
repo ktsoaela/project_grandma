@@ -18,7 +18,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
     </ul>
 </TabItem>
 <TabItem label="macOS">
-    <ul>`
+    <ul>
         <li><strong>OS</strong>: macOS 10.12 or later</li>
         <li><strong>Processor</strong>: Intel or Apple Silicon</li>
         <li><strong>Memory</strong>: 4GB RAM (8GB recommended)</li>
@@ -73,6 +73,8 @@ Drag "Project Grandma" to the Applications folder
 Open Applications folder and double-click "Project Grandma"
 
 **First Time?**: macOS may ask for permission - click "Open"
+
+**Permissions**: In **System Settings → Privacy & Security**, enable **Input Monitoring**, **Screen Recording**, and **Accessibility** for **Project Grandma** (for the built app). If you run from source, enable them for **Terminal** instead. See [macOS Support](/features/macos/) for details.
 
 ### For M1/M2 Macs
 The universal binary works on both Intel and Apple Silicon Macs

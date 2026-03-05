@@ -1,0 +1,24 @@
+---
+title: Export Format Comparison
+description: Visual comparison of export formats with Chart.js
+---
+
+import DataChart from '../../../components/DataChart.astro';
+
+## Relative file size by format
+
+Approximate typical file sizes (MB) for a 10-step recording. Use this as a guide when choosing a format.
+
+<DataChart
+  type="bar"
+  title="Typical file size (MB) by format"
+  labels={['HTML', 'PDF', 'Markdown', 'Video (MP4)']}
+  data={[25, 80, 15, 200]}
+/>
+
+- **HTML** — Lightest; good for sharing and web.
+- **PDF** — Heavier; best for print and archive.
+- **Markdown** — Text + images folder; small and editable.
+- **Video** — Largest; full motion, higher FPS = larger.
+
+For full export options and tips, see [Export Formats](/guide/export/).

@@ -7,6 +7,17 @@ description: Understanding Project Grandma export options
 
 After recording, choose how to share your guide:
 
+### Format comparison at a glance
+
+```mermaid
+pie showData
+  title Typical relative file size (approx.)
+  "HTML" : 25
+  "PDF" : 80
+  "Markdown" : 15
+  "Video (MP4)" : 200
+```
+
 ### HTML
 **Best for:** Interactive viewing, quick sharing, web
 

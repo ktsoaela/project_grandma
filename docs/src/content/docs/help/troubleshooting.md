@@ -39,6 +39,15 @@ System Preferences → Security & Privacy
 Click "Open Anyway"
 ```
 
+**Problem:** Recording or click detection doesn't work
+
+**Solution:** Grant required permissions in **Privacy & Security** (enable for **Project Grandma** if using the built app, or **Terminal** if running from source):
+1. Open **System Settings** → **Privacy & Security**
+2. Under **Input Monitoring**, add/allow the relevant app
+3. Under **Screen Recording**, add/allow the relevant app
+4. Under **Accessibility**, add/allow the relevant app
+5. Restart the app or Terminal, then try again
+
 ## Recording Won't Start
 
 **Problem:** Click "Start Record" but nothing happens

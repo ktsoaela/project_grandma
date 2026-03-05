@@ -41,6 +41,7 @@ export default defineConfig({
             { label: 'How to Record', slug: 'guide/recording' },
             { label: 'Add Comments', slug: 'guide/comments' },
             { label: 'Export Formats', slug: 'guide/export' },
+            { label: 'Export Comparison (Chart)', slug: 'guide/export-chart' },
             { label: 'Tips & Tricks', slug: 'guide/tips' },
           ],
         },
@@ -51,6 +52,16 @@ export default defineConfig({
             { label: 'macOS Support', slug: 'features/macos' },
             { label: 'Export Options', slug: 'features/exports' },
             { label: 'Video Recording', slug: 'features/video' },
+            {
+              label: 'Click Circle',
+              items: [
+                { label: 'Overview', slug: 'features/click-circle' },
+                { label: 'Quick Reference', slug: 'features/click-circle/quick-reference' },
+                { label: 'Feature Guide', slug: 'features/click-circle/feature' },
+                { label: 'Visual Guide', slug: 'features/click-circle/visual-guide' },
+                { label: 'Implementation', slug: 'features/click-circle/implementation' },
+              ],
+            },
           ],
         },
         {

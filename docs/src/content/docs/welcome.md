@@ -26,9 +26,10 @@ It's designed like you're explaining something to your grandma - clear, simple, 
 
 1. **Records Steps**: Every click creates a new step
 2. **Captures Screenshots**: Automatic visual documentation
-3. **Detects Elements**: Shows what you clicked on Windows
-4. **Adds Comments**: Explain confusing steps
-5. **Exports Guides**: Share in multiple formats
+3. **Click Circle**: Visual feedback shows exactly where you clicked (in the UI and on all exports)
+4. **Detects Elements**: Shows what you clicked on Windows
+5. **Adds Comments**: Explain confusing steps
+6. **Exports Guides**: Share in multiple formats
 
 ## How It Works
 
@@ -41,11 +42,16 @@ flowchart TD
     E --> F[Explanation]
 ```
 
+## New & Notable
+
+- **Click Circle** — A green circle appears at each click location during recording and on every exported screenshot (HTML, PDF, video). Customize color, size, and animation in [Click Circle docs](/features/click-circle/).
+
 ## Getting Started
 
 - [Install Project Grandma](/installation/)
 - [Quick Start Guide](/quick-start/)
 - [View Full Documentation](/guide/recording/)
+- [Click Circle customization](/features/click-circle/) — Change how click feedback looks
 
 ## Inspired By
 

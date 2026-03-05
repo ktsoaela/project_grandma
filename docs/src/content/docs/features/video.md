@@ -3,8 +3,6 @@ title: Video Recording
 description: MP4 recording options and tips
 ---
 
-# Video Recording
-
 Project Grandma can optionally record an MP4 of the session. Lower FPS reduces file size.
 
 Tips:
