@@ -23,7 +23,7 @@
             aria-label="Number of screen captures to store">
         </div>
         <div class="settings-row">
-          <label><input type="checkbox" id="record-video" aria-label="Record video as MP4" /> Record video (MP4)</label>
+          <label><input type="checkbox" id="record-video" checked aria-label="Record video as MP4" /> Record video (MP4)</label>
           <span class="label-inline">FPS:</span>
           <input type="number" id="video-fps" min="1" max="10" value="3" class="input-small"
             aria-label="Video frames per second">
@@ -57,6 +57,7 @@
 
     <div id="save-dialog" class="save-dialog hidden">
       <p>Recording saved.</p>
+      <p id="video-error-msg" class="video-error hidden" role="alert"></p>
       <div id="save-buttons" class="save-buttons"></div>
       <button type="button" class="btn btn-secondary btn-done" aria-label="Done">Done</button>
     </div>

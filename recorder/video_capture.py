@@ -12,15 +12,24 @@ _writer = None
 _stop = threading.Event()
 _thread = None
 _output_path = None
+_last_video_error = None  # set when recording fails so UI can show a message
 
 
 def _capture_loop(fps, output_path):
-    global _writer, _stop, _output_path
+    global _writer, _stop, _output_path, _last_video_error
+    _last_video_error = None
     try:
         import mss
         import numpy as np
         import imageio
-    except ImportError:
+    except ImportError as e:
+        missing = []
+        for name in ("mss", "numpy", "imageio"):
+            try:
+                __import__(name)
+            except ImportError:
+                missing.append(name)
+        _last_video_error = "Video recording requires: mss, numpy, imageio, imageio-ffmpeg. Missing or broken: " + ", ".join(missing) + ". Run: pip install -r recorder/requirements.txt"
         return
     try:
         with mss.mss() as sct:
@@ -40,7 +49,8 @@ def _capture_loop(fps, output_path):
                 if sleep > 0:
                     _stop.wait(sleep)
             w.close()
-    except Exception:
+    except Exception as e:
+        _last_video_error = str(e) or "Video recording failed (e.g. FFmpeg not found). Install imageio-ffmpeg or FFmpeg."
         if _writer is not None:
             try:
                 _writer.close()
@@ -51,19 +61,33 @@ def _capture_loop(fps, output_path):
         _output_path = output_path
 
 
+def get_last_video_error():
+    """Return and clear the last video error message (if any)."""
+    global _last_video_error
+    err = _last_video_error
+    _last_video_error = None
+    return err
+
+
 def start_video_recording(fps=3, output_dir=None):
-    """Start recording video. Returns path where file will be written."""
-    global _thread, _stop, _output_path
+    """Start recording video. Returns path where file will be written. Raises on failure."""
+    global _thread, _stop, _output_path, _last_video_error
     if _thread is not None and _thread.is_alive():
         return None
     _output_path = None
+    _last_video_error = None
     _stop.clear()
     output_dir = output_dir or tempfile.gettempdir()
     name = "StepsRecorder_%s.mp4" % datetime.now().strftime("%Y%m%d_%H%M%S")
     path = os.path.join(output_dir, name)
     _thread = threading.Thread(target=_capture_loop, args=(fps, path), daemon=True)
     _thread.start()
-    time.sleep(0.3)
+    time.sleep(0.5)
+    if _last_video_error:
+        err = _last_video_error
+        _last_video_error = None
+        _thread = None
+        raise RuntimeError(err)
     return path
 
 

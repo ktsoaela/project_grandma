@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { spawn } = require('child_process');
@@ -9,6 +9,8 @@ const http = require('http');
 app.commandLine.appendSwitch('force-renderer-accessibility');
 
 let mainWindow = null;
+let overlayWindow = null;
+let clickOverlayPollInterval = null;
 let pythonProcess = null;
 const RECORDER_PORT = 37482;
 
@@ -139,6 +141,59 @@ function stopPythonRecorder() {
   }
 }
 
+function createOverlayWindow() {
+  if (overlayWindow && !overlayWindow.isDestroyed()) return overlayWindow;
+  const primary = screen.getPrimaryDisplay();
+  const { width, height, x, y } = primary.bounds;
+  overlayWindow = new BrowserWindow({
+    x, y, width, height,
+    transparent: true,
+    frame: false,
+    hasShadow: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+  });
+  overlayWindow.setIgnoreMouseEvents(true, { forward: true });
+  overlayWindow.loadFile(path.join(__dirname, 'renderer', 'overlay.html'));
+  overlayWindow.on('closed', () => { overlayWindow = null; });
+  return overlayWindow;
+}
+
+function startClickOverlayPolling() {
+  if (clickOverlayPollInterval) return;
+  const win = createOverlayWindow();
+  win.show();
+  clickOverlayPollInterval = setInterval(async () => {
+    if (!overlayWindow || overlayWindow.isDestroyed()) return;
+    try {
+      const data = await requestRecorder('GET', '/last_click');
+      if (data && typeof data.x === 'number' && typeof data.y === 'number') {
+        const b = overlayWindow.getBounds();
+        const localX = data.x - b.x;
+        const localY = data.y - b.y;
+        if (localX >= 0 && localX < b.width && localY >= 0 && localY < b.height) {
+          overlayWindow.webContents.executeJavaScript(`showCircle(${localX},${localY})`).catch(() => {});
+        }
+      }
+    } catch (_) {}
+  }, 50);
+}
+
+function stopClickOverlayPolling() {
+  if (clickOverlayPollInterval) {
+    clearInterval(clickOverlayPollInterval);
+    clickOverlayPollInterval = null;
+  }
+  if (overlayWindow && !overlayWindow.isDestroyed()) {
+    overlayWindow.hide();
+  }
+}
+
 app.whenReady().then(() => {
   // Explicitly enable accessibility tree for macOS (helps recorder detect button names, etc.)
   if (typeof app.setAccessibilitySupportEnabled === 'function') {
@@ -149,15 +204,18 @@ app.whenReady().then(() => {
   ipcMain.handle('recorder:start', async (_, options) => {
     await startPythonRecorder();
     const opts = typeof options === 'object' ? options : { maxScreenshots: options };
-    return requestRecorder('POST', '/start', {
+    const result = await requestRecorder('POST', '/start', {
       max_screenshots: opts.maxScreenshots ?? 25,
       record_video: opts.recordVideo === true,
       video_fps: opts.videoFps ?? 3,
       capture_typed_text: opts.captureTypedText === true,
     });
+    if (result && !result.error) startClickOverlayPolling();
+    return result;
   });
 
   ipcMain.handle('recorder:stop', async (_, exportFormats) => {
+    stopClickOverlayPolling();
     const result = await requestRecorder('POST', '/stop', {
       export_formats: exportFormats || ['html'],
     }).catch(() => ({}));

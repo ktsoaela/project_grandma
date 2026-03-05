@@ -62,6 +62,14 @@ class StepCapture:
         self._keyboard_throttle_sec = 2.0
         self._typed_buffer = []  # accumulates typed characters when capture_typed_text is True
         self._typed_lock = threading.Lock()
+        self._last_click = None  # (x, y, timestamp) for live click overlay
+
+    def get_last_click(self):
+        """Return and clear the last click (x, y, timestamp). Used for live green circle overlay."""
+        with self._lock:
+            out = self._last_click
+            self._last_click = None
+            return out
 
     def _take_screenshot(self, click_x=None, click_y=None):
         """Take a screenshot and optionally draw a circle at click location."""
@@ -125,6 +133,9 @@ class StepCapture:
     def _on_click(self, x, y, button, pressed):
         if not pressed:
             return
+        import time
+        with self._lock:
+            self._last_click = (int(x), int(y), time.monotonic())
         elem_result = get_element_at_point(x, y)
         # Handle both 3-tuple (win_info) and 5-tuple (mac_info) return
         elem_name = elem_result[0]

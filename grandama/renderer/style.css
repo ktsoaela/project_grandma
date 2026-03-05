@@ -210,6 +210,25 @@ body {
   animation: fadeIn 0.2s ease-in;
 }
 
+.video-error {
+  font-size: 12px;
+  color: #b71c1c;
+  background: #ffebee;
+  border: 1px solid #ef9a9a;
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+.video-error.hidden {
+  display: none;
+}
+
+.video-error:not(.hidden) {
+  display: block;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }

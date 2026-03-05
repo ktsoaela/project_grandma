@@ -14,7 +14,7 @@ from flask import Flask, request, jsonify
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from capture import StepCapture
 from report import build_html, build_pdf, build_md
-from video_capture import start_video_recording, stop_video_recording
+from video_capture import start_video_recording, stop_video_recording, get_last_video_error
 
 app = Flask(__name__)
 capture = None
@@ -41,6 +41,19 @@ def state():
     return jsonify({'recording': recording, 'step_count': count})
 
 
+@app.route('/last_click', methods=['GET'])
+def last_click():
+    """Return last click (x, y) for live green circle overlay. Consumed on read."""
+    global capture
+    if not capture:
+        return jsonify({'x': None, 'y': None})
+    out = capture.get_last_click()
+    if not out:
+        return jsonify({'x': None, 'y': None})
+    x, y, _ = out
+    return jsonify({'x': x, 'y': y})
+
+
 @app.route('/start', methods=['POST'])
 def start():
     global capture, _video_path
@@ -56,7 +69,10 @@ def start():
     capture.start()
     _video_path = None
     if record_video:
-        _video_path = start_video_recording(fps=video_fps)
+        try:
+            _video_path = start_video_recording(fps=video_fps)
+        except RuntimeError as e:
+            return jsonify({'recording': True, 'step_count': 0, 'video_error': str(e)}), 200
     return jsonify({'recording': True, 'step_count': 0})
 
 
@@ -91,6 +107,9 @@ def stop():
             video_path = stop_video_recording()
             if video_path and os.path.isfile(video_path):
                 paths['video'] = video_path
+            video_error = get_last_video_error()
+            if video_error:
+                paths['video_error'] = video_error
         _video_path = None
         capture = None
     return jsonify({'recording': False, 'path': paths.get('html'), 'paths': paths})

@@ -46,12 +46,18 @@ btnStart.addEventListener('click', async () => {
   const captureTypedText = captureTypedTextCheck.checked;
   btnStart.disabled = true;
   try {
-    await window.recorderAPI.start({
+    const result = await window.recorderAPI.start({
       maxScreenshots: max,
       recordVideo,
       videoFps,
       captureTypedText,
     });
+    if (result && result.error) {
+      throw new Error(typeof result.error === 'string' ? result.error : result.error.message || 'Request failed');
+    }
+    if (result && result.video_error) {
+      alert('Recording started, but video could not be recorded:\n\n' + result.video_error);
+    }
     showState(false, true, false);
     updateStepCount(0);
     pollInterval = setInterval(pollState, 800);
@@ -89,10 +95,18 @@ btnStop.addEventListener('click', async () => {
     const result = await window.recorderAPI.stop(exportFormats);
     showState(false, false, true);
     const paths = result && result.paths ? result.paths : (result && result.path ? { html: result.path } : {});
+    const videoErrorEl = document.getElementById('video-error-msg');
+    if (paths.video_error) {
+      videoErrorEl.textContent = 'Video: ' + paths.video_error;
+      videoErrorEl.classList.remove('hidden');
+    } else {
+      videoErrorEl.textContent = '';
+      videoErrorEl.classList.add('hidden');
+    }
     saveButtons.innerHTML = '';
     const labels = { html: 'Open HTML', pdf: 'Open PDF', md: 'Open Markdown', video: 'Open video' };
     for (const [key, path] of Object.entries(paths)) {
-      if (path) {
+      if (path && key !== 'video_error') {
         const btn = document.createElement('button');
         btn.className = 'btn btn-secondary save-btn';
         btn.setAttribute('data-format', key);
