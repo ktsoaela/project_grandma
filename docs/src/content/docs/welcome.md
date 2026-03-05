@@ -45,6 +45,9 @@ flowchart TD
 ## New & Notable
 
 - **Click Circle** — A green circle appears at each click location during recording and on every exported screenshot (HTML, PDF, video). Customize color, size, and animation in [Click Circle docs](/features/click-circle/).
+- **Export format comparison** — See [Export Comparison (Chart)](/guide/export-chart/) for a visual comparison of typical file sizes (HTML, PDF, Markdown, Video) to choose the right format.
+- **E2E testing (Playwright)** — Docs and full recording flow are tested with [Playwright](/dev/playwright-e2e/); run `npm run test` from grandama, or `npm run test:full` for the full Grandma + recording + exports flow.
+- **Full changelog** — See the project [CHANGELOG](https://github.com/ktsoaela/project_grandma/blob/main/CHANGELOG.md) for version history and planned features.
 
 ## Getting Started
 
@@ -52,6 +55,7 @@ flowchart TD
 - [Quick Start Guide](/quick-start/)
 - [View Full Documentation](/guide/recording/)
 - [Click Circle customization](/features/click-circle/) — Change how click feedback looks
+- [Export format comparison](/guide/export-chart/) — Compare HTML, PDF, Markdown, and Video sizes
 
 ## Inspired By
 

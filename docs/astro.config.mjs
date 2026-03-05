@@ -77,6 +77,7 @@ export default defineConfig({
           items: [
             { label: 'Project Structure', slug: 'dev/structure' },
             { label: 'Building from Source', slug: 'dev/build' },
+            { label: 'E2E Testing (Playwright)', slug: 'dev/playwright-e2e' },
             { label: 'Contributing', slug: 'dev/contributing' },
             { label: 'Architecture', slug: 'dev/architecture' },
           ],

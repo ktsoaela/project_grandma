@@ -29,7 +29,9 @@ Full documentation (installation, building, usage, macOS permissions, troublesho
 - [Quick start](./docs/src/content/docs/quick-start.md)
 - [Recording guide](./docs/src/content/docs/guide/recording.md)
 - [Export](./docs/src/content/docs/guide/export.md)
+- [Export comparison (chart)](./docs/src/content/docs/guide/export-chart.mdx)
 - [Building from source](./docs/src/content/docs/dev/build.md)
+- [E2E testing (Playwright)](./docs/src/content/docs/dev/playwright-e2e.md)
 - [macOS support & permissions](./docs/src/content/docs/features/macos.md)
 - [Troubleshooting](./docs/src/content/docs/help/troubleshooting.md)
 
