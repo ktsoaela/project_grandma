@@ -1,3 +1,8 @@
+---
+title: GitHub Actions & Documentation Setup Guide
+description: Guide to GitHub Actions and documentation deployment for Project Grandma
+---
+
 # GitHub Actions & Documentation Setup Guide
 
 ## ✅ What We've Created

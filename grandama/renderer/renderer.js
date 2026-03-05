@@ -95,6 +95,8 @@ btnStop.addEventListener('click', async () => {
       if (path) {
         const btn = document.createElement('button');
         btn.className = 'btn btn-secondary save-btn';
+        btn.setAttribute('data-format', key);
+        btn.setAttribute('data-path', path);
         btn.textContent = labels[key] || key;
         btn.onclick = () => window.recorderAPI.openReport(path);
         saveButtons.appendChild(btn);
