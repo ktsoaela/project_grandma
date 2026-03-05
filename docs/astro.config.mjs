@@ -1,8 +1,11 @@
 import { defineConfig } from 'astro/config';
+import mermaid from 'astro-mermaid';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
   integrations: [
+    // Mermaid must come before Starlight so markdown code blocks are transformed correctly
+    mermaid(),
     starlight({
       title: 'Project Grandma',
       logo: {

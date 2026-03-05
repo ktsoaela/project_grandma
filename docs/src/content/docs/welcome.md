@@ -32,10 +32,13 @@ It's designed like you're explaining something to your grandma - clear, simple, 
 
 ## How It Works
 
-```
-Click to record → Automatic screenshot → Add comment (optional)
-     ↓                    ↓                        ↓
-  One action         What happened          Explanation
+```mermaid
+flowchart TD
+    A[Click to record] --> B[Automatic screenshot]
+    B --> C[Add comment]
+    C --> D[One action]
+    D --> E[What happened]
+    E --> F[Explanation]
 ```
 
 ## Getting Started

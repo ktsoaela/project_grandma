@@ -92,42 +92,39 @@ npm run build:all
 
 ## Project Structure
 
-```
-project_grandma/
-├── .github/
-│   ├── workflows/        (GitHub Actions)
-│   └── release-template.md
-├── docs/                 (Starlight documentation)
-├── grandama/             (Electron app)
-│   ├── main.js          (Entry point)
-│   ├── preload.js       (IPC bridge)
-│   ├── renderer/        (UI - HTML/CSS/JS)
-│   ├── assets/          (Icons, images)
-│   └── package.json
-├── recorder/            (Python backend)
-│   ├── server.py        (Flask API)
-│   ├── capture.py       (Screenshot/click capture)
-│   ├── report.py        (HTML/PDF/MD generation)
-│   ├── video_capture.py (MP4 recording)
-│   ├── win_info.py      (Windows element detection)
-│   └── requirements.txt
-└── README.md
+```mermaid
+flowchart TB
+    Root[project_grandma/]
+    Root --> Github[.github/]
+    Github --> Workflows[workflows/]
+    Workflows --> Release[release-template.md]
+    Release --> Docs[docs/]
+    Docs --> App[grandama/]
+    App --> Main[main.js]
+    Main --> Preload[preload.js]
+    Preload --> Renderer[renderer/]
+    Renderer --> Assets[assets/]
+    Assets --> AppPkg[package.json]
+    AppPkg --> Backend[recorder/]
+    Backend --> Server[server.py]
+    Server --> Capture[capture.py]
+    Capture --> Report[report.py]
+    Report --> Video[video_capture.py]
+    Video --> WinInfo[win_info.py]
+    WinInfo --> Requirements[requirements.txt]
+    Requirements --> Readme[README.md]
 ```
 
 ## Architecture
 
 ### Communication Flow
 
-```
-Electron UI (JavaScript)
-    ↓ IPC
-Preload Bridge
-    ↓ HTTP
-Python Server (Flask)
-    ↓
-System APIs (pynput, mss, pyautogui)
-    ↓
-Report Generator (HTML, PDF, Markdown)
+```mermaid
+flowchart TD
+    Ui[Electron UI] --> Preload[Preload bridge]
+    Preload --> Python[Python server]
+    Python --> Apis[System apis]
+    Apis --> Reports[Report generator]
 ```
 
 ### Key Files
