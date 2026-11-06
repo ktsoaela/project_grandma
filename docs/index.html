@@ -48,7 +48,8 @@
     article span { color:var(--muted); font-size:15px; }
     .exports { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
     .exports span { border:1px solid var(--line); background:var(--card); border-radius:999px; padding:8px 14px; color:var(--ink); font-size:14px; }
-    .report-frame { height:560px; border:0; background:#fff; }
+    .report-shot { display:block; max-height:640px; overflow:hidden; background:#fff; }
+    .report-shot img { width:100%; max-width:820px; margin:0 auto; border-radius:12px; }
     .download { background:var(--deep); color:#f6f3ee; border-radius:28px; padding:48px 40px; }
     .download h2 { color:#fff; }
     .download .lead { color:#d6d3d1; }
@@ -91,7 +92,7 @@
         </div>
       </div>
       <figure class="frame" id="steps">
-        <video controls playsinline preload="metadata" poster="howto-poster.jpg?v=howto" src="explainer.mp4?v=howto"></video>
+        <video controls playsinline preload="metadata" poster="howto-poster.jpg?v=howto2" src="explainer.mp4?v=howto2"></video>
         <figcaption>How to use Project Grandma: find the app, click Start Record, download Project Grandma, stop, view the report, and hand it to a friend.</figcaption>
       </figure>
     </div>
@@ -121,10 +122,10 @@
       <div class="wrap">
         <h2>The report</h2>
         <p class="lead">This is the document Grandma saves. Every step has the time, what was clicked, and the screenshot.</p>
-        <div class="frame">
-          <iframe class="report-frame" src="example-report.html" title="Example recorded-steps report"></iframe>
-        </div>
-        <p class="fine"><a href="example-report.html">Open the example report</a></p>
+        <a class="frame report-shot" href="example-report.html">
+          <img src="report-preview.jpg?v=2" alt="The recorded-steps report: the header, then Step 1 with its time, the click, and the screenshot" />
+        </a>
+        <p class="fine"><a class="btn ghost" href="example-report.html">Open the full report</a></p>
       </div>
     </section>
     <section id="download">

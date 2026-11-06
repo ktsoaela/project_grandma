@@ -217,7 +217,7 @@ def capture():
         site = b.new_page(viewport={"width": W, "height": 720})
         site.goto(SITE, wait_until="networkidle")
         site.screenshot(path=str(WORK / "site-top.png"))
-        boxes["nav_download"] = site.locator("header a.btn:not(.ghost)").bounding_box()
+        boxes["nav_download"] = site.locator('header a.hide[href="#download"]').bounding_box()
         site.evaluate("window.scrollTo(0, document.body.scrollHeight)")
         site.wait_for_timeout(800)
         site.screenshot(path=str(WORK / "site-download.png"))
@@ -232,7 +232,11 @@ def shoot_report():
         page = b.new_page(viewport={"width": W, "height": 720})
         page.goto((DOCS / "example-report.html").as_uri())
         page.screenshot(path=str(WORK / "report.png"))
+        page.set_viewport_size({"width": 820, "height": 1500})
+        page.screenshot(path=str(WORK / "report-tall.png"))
         b.close()
+    preview = Image.open(WORK / "report-tall.png").convert("RGB")
+    preview.save(DOCS / "report-preview.jpg", quality=86)
 
 
 # ---------- pictures for each step ----------
@@ -368,7 +372,7 @@ SCRIPT = [
     (4, "perform", "Perform your actions. In this example, we will be installing Project Grandma.", "Perform your actions. Here, we install Project Grandma."),
     (5, "browser", "Open your browser.", "Open your browser."),
     (6, "address", "Go to ktsoaela dot github dot io, slash project underscore grandma.", "Go to ktsoaela.github.io/project_grandma/"),
-    (7, "download", "Click Download at the top right of the screen, or scroll down to the Download section at the bottom.", "Click Download at the top right, or scroll down to the Download section."),
+    (7, "download", "Click Download at the top left of the screen, or scroll down to the Download section at the bottom.", "Click Download at the top left, or scroll down to the Download section."),
     (8, "choose", "Choose your operating system, and download it.", "Choose your operating system and download it."),
     (9, "stop", "End the recording. Click Stop Record.", "End the recording: click Stop Record."),
     (10, "report", "View the report. Every step has the time, what you clicked, and a screenshot.", "View the report."),
