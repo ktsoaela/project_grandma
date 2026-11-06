@@ -57,6 +57,7 @@ Thumbs.db
 # Large media files
 *.mp4
 !docs/explainer.mp4
+scripts/_howto_work/
 *.tiff
 *.avi
 *.flv
