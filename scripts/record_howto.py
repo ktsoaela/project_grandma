@@ -1,5 +1,6 @@
 """Record a Windows Chrome walkthrough of the live page, with a spoken how-to."""
 import asyncio
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -14,13 +15,12 @@ FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 URL = "https://ktsoaela.github.io/project_grandma/"
 VOICE = "en-US-JennyNeural"
-GAP = 0.45
+GAP = 0.35
 
 BEATS = [
-    ("ready", "In this video, you will open the Project Grandma page on Windows, and follow each direction."),
-    ("chrome", "First, open Google Chrome."),
+    ("chrome", "On Windows, open Google Chrome."),
     ("address", "Select the address bar."),
-    ("type", "Go to ktsoaela.github.io, slash project underscore grandma. Then press Enter."),
+    ("type", "Type ktsoaela.github.io, slash project underscore grandma, and press Enter."),
     ("loaded", "The page opens. The heading reads: Show the steps. Not just the result."),
     ("idea", "This is a step recorder. Every click becomes a screenshot, a note, and a guide someone else can follow."),
     ("scroll", "Scroll to What it records. These are the directions."),
@@ -42,7 +42,9 @@ BEATS = [
 
 
 def run(cmd):
-    subprocess.run(cmd, check=True, capture_output=True)
+    done = subprocess.run(cmd, capture_output=True, text=True)
+    if done.returncode != 0:
+        raise SystemExit((done.stderr or done.stdout or "ffmpeg failed")[-2000:])
 
 
 def duration(path: Path) -> float:
@@ -62,7 +64,7 @@ async def speak_all():
     paths = []
     for i, (_, text) in enumerate(BEATS):
         dest = WORK / f"line-{i:02d}.mp3"
-        if not dest.exists():
+        if not dest.exists() or dest.stat().st_size < 1000:
             await edge_tts.Communicate(text, VOICE, rate="-6%").save(str(dest))
         paths.append(dest)
     return paths
@@ -86,41 +88,73 @@ def main():
     lines = asyncio.run(speak_all())
     lengths = [duration(p) for p in lines]
 
-    profile = WORK / "chrome-profile"
+    profile = WORK / "chrome-clean"
+    subprocess.run(
+        ["powershell", "-NoProfile", "-Command",
+         "Get-CimInstance Win32_Process -Filter \"Name='chrome.exe'\" | "
+         "Where-Object { $_.CommandLine -and $_.CommandLine.ToLower().Contains('chrome-clean') } | "
+         "ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }"],
+        capture_output=True,
+    )
+    shutil.rmtree(profile, ignore_errors=True)
     profile.mkdir(parents=True, exist_ok=True)
     proc = subprocess.Popen(
         [
             CHROME,
-            "--remote-debugging-port=9333",
+            "--remote-debugging-port=9341",
             f"--user-data-dir={profile}",
             "--no-first-run",
             "--no-default-browser-check",
             "--disable-extensions",
             "--disable-popup-blocking",
+            "--disable-session-crashed-bubble",
+            "--hide-crash-restore-bubble",
             "--start-maximized",
-            "about:blank",
+            "https://www.google.com/ncr?hl=en",
         ],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
 
+    def profile_pids():
+        ps = (
+            "Get-CimInstance Win32_Process -Filter \"Name='chrome.exe'\" | "
+            "Where-Object { $_.CommandLine -and $_.CommandLine.ToLower().Contains('chrome-clean') } | "
+            "ForEach-Object { $_.ProcessId }"
+        )
+        out = subprocess.check_output(["powershell", "-NoProfile", "-Command", ps], text=True, errors="ignore")
+        return {int(part) for part in out.split() if part.strip().isdigit()}
+
     def find_hwnd():
+        pids = profile_pids()
         found = []
 
         @ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
         def cb(hwnd, _):
             if not user32.IsWindowVisible(hwnd):
                 return True
+            pid = wintypes.DWORD()
+            user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+            if pid.value not in pids:
+                return True
             length = user32.GetWindowTextLengthW(hwnd)
             buf = ctypes.create_unicode_buffer(length + 1)
             user32.GetWindowTextW(hwnd, buf, length + 1)
-            title = buf.value
-            if "Google Chrome" in title or title == "about:blank":
+            if buf.value:
                 found.append(hwnd)
             return True
 
         user32.EnumWindows(cb, 0)
         return found[-1] if found else None
+
+    def focus(hwnd):
+        fg = user32.GetForegroundWindow()
+        fg_thread = user32.GetWindowThreadProcessId(fg, None)
+        this = ctypes.windll.kernel32.GetCurrentThreadId()
+        user32.AttachThreadInput(this, fg_thread, True)
+        user32.ShowWindow(hwnd, 3)
+        user32.SetForegroundWindow(hwnd)
+        user32.AttachThreadInput(this, fg_thread, False)
 
     hwnd = None
     for _ in range(40):
@@ -132,8 +166,8 @@ def main():
         proc.kill()
         raise SystemExit("Chrome window not found")
 
-    user32.ShowWindow(hwnd, 3)
-    user32.SetForegroundWindow(hwnd)
+    focus(hwnd)
+    user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0002 | 0x0001)
     time.sleep(0.8)
 
     class RECT(ctypes.Structure):
@@ -147,6 +181,18 @@ def main():
     w, h = min(rect.r, sw) - x, min(rect.b, sh) - y
     w -= w % 2
     h -= h % 2
+
+    ready = False
+    for _ in range(8):
+        focus(hwnd)
+        user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0002 | 0x0001)
+        time.sleep(0.4)
+        if user32.GetForegroundWindow() == hwnd:
+            ready = True
+            break
+    if not ready:
+        subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)], capture_output=True)
+        raise SystemExit("Chrome was not in front, so nothing was recorded.")
 
     raw = WORK / "capture.mp4"
     ff = subprocess.Popen(
@@ -169,26 +215,31 @@ def main():
         stderr=subprocess.DEVNULL,
     )
     time.sleep(0.6)
+    record_t0 = time.perf_counter()
+    starts = []
+    mouse_home = pyautogui.position()
 
     with sync_playwright() as p:
-        browser = p.chromium.connect_over_cdp("http://127.0.0.1:9333")
+        browser = p.chromium.connect_over_cdp("http://127.0.0.1:9341")
         context = browser.contexts[0]
         page = context.pages[0]
-
-        def focus():
-            user32.ShowWindow(hwnd, 3)
-            user32.SetForegroundWindow(hwnd)
+        try:
+            page.wait_for_load_state("domcontentloaded", timeout=20000)
+        except Exception:
+            pass
 
         def hold(index, action=None):
-            start = time.perf_counter()
+            starts.append(time.perf_counter())
             if action:
                 action()
-            remain = lengths[index] + GAP - (time.perf_counter() - start)
+            remain = lengths[index] + GAP - (time.perf_counter() - starts[-1])
             if remain > 0:
                 time.sleep(remain)
 
         def address_bar():
-            focus()
+            focus(hwnd)
+            pyautogui.moveTo(x + int(w * 0.45), y + 78, duration=0.35)
+            pyautogui.click()
             pyautogui.hotkey("ctrl", "l")
             time.sleep(0.2)
 
@@ -214,8 +265,7 @@ def main():
             page.add_style_tag(content=".howto-hot{outline:3px solid #8d4a32;outline-offset:4px;border-radius:16px}")
 
         actions = {
-            "ready": lambda: focus(),
-            "chrome": lambda: focus(),
+            "chrome": lambda: focus(hwnd),
             "address": address_bar,
             "type": go,
             "loaded": lambda: page.evaluate("window.scrollTo({top:0,behavior:'smooth'})"),
@@ -238,36 +288,33 @@ def main():
         }
         for i, (key, _) in enumerate(BEATS):
             hold(i, actions[key])
-        browser.close()
+        scroll_at = next(i for i, (key, _) in enumerate(BEATS) if key == "scroll")
+        poster_at = starts[scroll_at] - record_t0
+        try:
+            ff.stdin.write(b"q")
+            ff.stdin.flush()
+        except Exception:
+            pass
+        try:
+            ff.wait(timeout=8)
+        except subprocess.TimeoutExpired:
+            ff.kill()
 
-    time.sleep(0.4)
-    try:
-        ff.stdin.write(b"q")
-        ff.stdin.flush()
-    except Exception:
-        pass
-    try:
-        ff.wait(timeout=8)
-    except subprocess.TimeoutExpired:
-        ff.kill()
-    proc.terminate()
+    pyautogui.moveTo(mouse_home.x, mouse_home.y, duration=0.2)
+    subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)], capture_output=True)
 
-    concat = WORK / "list.txt"
-    silence = WORK / "gap.mp3"
-    run([
-        FFMPEG, "-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono",
-        "-t", str(GAP), "-c:a", "libmp3lame", "-q:a", "6", str(silence),
-    ])
-    parts = []
-    for line in lines:
-        parts.append(f"file '{line.as_posix()}'")
-        parts.append(f"file '{silence.as_posix()}'")
-    concat.write_text("\n".join(parts), encoding="utf-8")
     voice = WORK / "voice.m4a"
-    run([
-        FFMPEG, "-y", "-f", "concat", "-safe", "0", "-i", str(concat),
-        "-c:a", "aac", "-b:a", "160k", str(voice),
-    ])
+    filters, labels = [], []
+    mix = [FFMPEG, "-y"]
+    for line in lines:
+        mix += ["-i", str(line)]
+    for i, start in enumerate(starts):
+        ms = max(0, int((start - record_t0) * 1000))
+        filters.append(f"[{i}:a]adelay={ms}|{ms}[a{i}]")
+        labels.append(f"[a{i}]")
+    filters.append("".join(labels) + f"amix=inputs={len(starts)}:duration=longest:dropout_transition=0:normalize=0[a]")
+    mix += ["-filter_complex", ";".join(filters), "-map", "[a]", "-c:a", "aac", "-b:a", "160k", str(voice)]
+    run(mix)
     final = DOCS / "explainer.mp4"
     run([
         FFMPEG, "-y", "-i", str(raw), "-i", str(voice),
@@ -277,7 +324,8 @@ def main():
     ])
     poster = DOCS / "howto-poster.jpg"
     run([
-        FFMPEG, "-y", "-ss", "18", "-i", str(final), "-frames:v", "1", "-update", "1", str(poster),
+        FFMPEG, "-y", "-ss", f"{max(0, poster_at):.2f}", "-i", str(final),
+        "-frames:v", "1", "-update", "1", str(poster),
     ])
     print("wrote", final)
 
