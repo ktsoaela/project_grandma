@@ -58,6 +58,7 @@ Thumbs.db
 *.mp4
 !docs/explainer.mp4
 scripts/_howto_work/
+scripts/_wikihow_work/
 *.tiff
 *.avi
 *.flv
