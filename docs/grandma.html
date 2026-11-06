@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Grandma</title>
+  <style>
+    body { margin:0; min-height:100vh; display:grid; place-items:center; background:#d9d3cc; font:13px/1.4 "Segoe UI", sans-serif; color:#333; }
+    .app { width:min(520px, calc(100% - 32px)); background:#f0f0f0; border:1px solid #c8c8c8; border-radius:8px; padding:18px 20px 22px; }
+    h1 { margin:0 0 4px; font-size:15px; }
+    .sub { margin:0 0 14px; color:#666; font-size:12px; }
+    .count { color:#555; margin-bottom:12px; }
+    .count b { color:#0078d4; }
+    button, a.btn { font:inherit; border-radius:4px; padding:8px 16px; cursor:pointer; text-decoration:none; display:inline-flex; }
+    #btn-stop { background:#c42b1c; color:#fff; border:0; }
+    .save { margin-top:16px; padding-top:14px; border-top:1px solid #ccc; }
+    .save p { margin:0 0 10px; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; }
+    a.btn { background:#e5e5e5; color:#333; border:1px solid #ccc; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Grandma Steps</h1>
+    <p class="sub">Record steps to reproduce a problem</p>
+    <div id="recording">
+      <p class="count"><b>3</b> steps recorded. Record video is on.</p>
+      <button id="btn-stop" type="button">Stop Record</button>
+    </div>
+    <div id="save" class="save hidden">
+      <p>Recording saved.</p>
+      <div class="row">
+        <a class="btn" id="open-html" href="example-report.html">Open HTML</a>
+        <a class="btn" id="open-video" href="explainer.mp4" download>Open video</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById('btn-stop').addEventListener('click', function () {
+      document.getElementById('recording').classList.add('hidden');
+      document.getElementById('save').classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>

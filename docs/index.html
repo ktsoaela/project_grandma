@@ -33,9 +33,14 @@
     .howto figcaption { color:var(--muted); font-size:14px; margin:10px 4px 4px; }
     article { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; }
     article b { display:block; margin-bottom:4px; }
-    article span { color:var(--muted); font-size:15px; }
+    article span, .fine { color:var(--muted); font-size:15px; }
+    .fine { text-align:center; max-width:40em; margin:18px auto 0; }
+    .report-frame { width:100%; height:540px; border:1px solid var(--line); border-radius:16px; background:#fff; }
+    .downloads { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .downloads article { display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
+    .downloads .btn { margin-top:8px; }
     footer { padding:28px 0 40px; color:var(--muted); font-size:14px; text-align:center; }
-    @media (max-width:800px) { .grid { grid-template-columns:1fr; } .nav a.hide { display:none; } }
+    @media (max-width:800px) { .grid, .downloads { grid-template-columns:1fr; } .nav a.hide { display:none; } }
   </style>
 </head>
 <body>
@@ -43,7 +48,8 @@
     <div class="wrap nav">
       <a class="brand" href="#top"><img src="logo.png" alt="" /> Project Grandma</a>
       <a class="hide" href="#steps">Steps</a>
-      <a class="hide" href="#export">Export</a>
+      <a class="hide" href="#report">Report</a>
+      <a class="hide" href="#download">Download</a>
       <span class="end"><a class="btn" href="https://github.com/ktsoaela/project_grandma">View on GitHub</a></span>
     </div>
   </header>
@@ -82,6 +88,33 @@
           <article><b>Windows</b><span>Windows 10 and later.</span></article>
           <article><b>macOS</b><span>macOS 10.12 and later. Screen recording permission is required.</span></article>
         </div>
+      </div>
+    </section>
+    <section id="report">
+      <div class="wrap">
+        <h2>The report</h2>
+        <p class="lead">This is the document Grandma saves when you click Save. Every step has the time, what was clicked, and the screenshot.</p>
+        <iframe class="report-frame" src="example-report.html" title="Example recorded-steps report"></iframe>
+        <p class="fine"><a href="example-report.html">Open the example report</a></p>
+      </div>
+    </section>
+    <section id="download">
+      <div class="wrap">
+        <h2>Download</h2>
+        <p class="lead">Click download to use it. Windows gets an exe. Mac gets a disk image.</p>
+        <div class="downloads">
+          <article>
+            <b>Windows</b>
+            <span>Windows 10 or later. The file is Project-Grandma-Setup.exe.</span>
+            <a class="btn" id="dl-win" href="https://github.com/ktsoaela/project_grandma/releases">Download for Windows</a>
+          </article>
+          <article>
+            <b>Mac</b>
+            <span>macOS 10.12 or later. The file is Project-Grandma.dmg.</span>
+            <a class="btn" id="dl-mac" href="https://github.com/ktsoaela/project_grandma/releases">Download for Mac</a>
+          </article>
+        </div>
+        <p class="fine">Both buttons open the latest GitHub release, where those two files are attached.</p>
       </div>
     </section>
   </main>
