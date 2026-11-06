@@ -8,7 +8,7 @@ A simple step recorder designed for explaining tasks clearly — like showing yo
 
 **[See Project Grandma →](https://ktsoaela.github.io/project_grandma/)**
 
-**Project Grandma** captures screenshots on every click and lets you add helpful notes, so anyone can follow along easily. The page is [`site/index.html`](site/index.html). It is published from the `DEV` branch by GitHub Actions.
+**Project Grandma** captures screenshots on every click and lets you add helpful notes, so anyone can follow along easily. The page is [`docs/index.html`](docs/index.html). Turn on GitHub Pages for the `docs` folder on the `DEV` branch.
 
 ---
 
