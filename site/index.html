@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Grandma — one step at a time</title>
+  <meta name="description" content="Project Grandma records each click as a step, with a screenshot and a note, then exports a guide anyone can follow." />
+  <link rel="icon" href="logo.png" />
+  <style>
+    :root { --ink:#2a211c; --muted:#6b5e56; --paper:#fbf7f2; --card:#fff; --line:#eadfd4; --brown:#8d4a32; --deep:#3d291f; }
+    * { box-sizing: border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:17px/1.55 "Segoe UI", system-ui, sans-serif; }
+    a { color:var(--deep); }
+    img { max-width:100%; display:block; }
+    .wrap { width:min(1040px, calc(100% - 40px)); margin:0 auto; }
+    header { background:#fff; border-bottom:1px solid var(--line); }
+    .nav { min-height:72px; display:flex; align-items:center; gap:18px; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:750; color:inherit; }
+    .brand img { width:40px; height:40px; object-fit:contain; }
+    nav a { color:var(--muted); text-decoration:none; font-size:15px; }
+    .end { margin-left:auto; }
+    .btn { display:inline-flex; align-items:center; min-height:44px; padding:0 18px; border-radius:999px; text-decoration:none; font-weight:700; background:var(--deep); color:#fff; }
+    .hero { padding:72px 0 36px; text-align:center; }
+    h1 { margin:0; font-size:clamp(42px, 6vw, 68px); line-height:.98; letter-spacing:-.04em; }
+    h1 span { display:block; color:var(--brown); }
+    .sub { max-width:38em; margin:18px auto 0; color:var(--muted); font-size:19px; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    section { padding:28px 0 64px; }
+    h2 { text-align:center; font-size:34px; letter-spacing:-.03em; margin:0 0 8px; }
+    .lead { text-align:center; color:var(--muted); margin:0 auto 24px; max-width:36em; }
+    article { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; }
+    article b { display:block; margin-bottom:4px; }
+    article span { color:var(--muted); font-size:15px; }
+    footer { padding:28px 0 40px; color:var(--muted); font-size:14px; text-align:center; }
+    @media (max-width:800px) { .grid { grid-template-columns:1fr; } .nav a.hide { display:none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top"><img src="logo.png" alt="" /> Project Grandma</a>
+      <a class="hide" href="#steps">Steps</a>
+      <a class="hide" href="#export">Export</a>
+      <span class="end"><a class="btn" href="https://github.com/ktsoaela/project_grandma">View on GitHub</a></span>
+    </div>
+  </header>
+  <main id="top">
+    <div class="hero wrap">
+      <h1>Show the steps.<span>Not just the result.</span></h1>
+      <p class="sub">A step recorder for explaining a task the way you would to your grandma. Every click becomes a screenshot, a note, and a guide someone else can follow.</p>
+    </div>
+    <section id="steps">
+      <div class="wrap">
+        <h2>What it records</h2>
+        <p class="lead">Windows and macOS. You click through the task. Grandma writes the guide.</p>
+        <div class="grid">
+          <article><b>A step per click</b><span>Each click is a new step, in the order you did it.</span></article>
+          <article><b>A screenshot</b><span>The screen is captured so the next person can see what you saw.</span></article>
+          <article><b>A click circle</b><span>A circle marks where you clicked, in the app and on the export.</span></article>
+          <article><b>What was clicked</b><span>On Windows, the recorder names the control when it can.</span></article>
+          <article><b>A comment</b><span>Add a sentence between steps when the click is not obvious.</span></article>
+          <article><b>A guide to share</b><span>Hand someone the result instead of walking them through it again.</span></article>
+        </div>
+      </div>
+    </section>
+    <section id="export">
+      <div class="wrap">
+        <h2>Take it with you</h2>
+        <p class="lead">The same recording can leave as a page, a document, notes, or a video.</p>
+        <div class="grid">
+          <article><b>HTML</b><span>An interactive step-by-step page.</span></article>
+          <article><b>PDF</b><span>A printable copy of the steps.</span></article>
+          <article><b>Markdown</b><span>Text with the screenshots embedded.</span></article>
+          <article><b>Video</b><span>An optional MP4 of the actions.</span></article>
+          <article><b>Windows</b><span>Windows 10 and later.</span></article>
+          <article><b>macOS</b><span>macOS 10.12 and later. Screen recording permission is required.</span></article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>Project Grandma. A step recorder by Khotso Tsoaela.</footer>
+</body>
+</html>

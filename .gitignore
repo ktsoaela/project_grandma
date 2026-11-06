@@ -25,6 +25,14 @@ dist/
 # Unit test reports
 TEST*.xml
 
+# Generated Astro cache — not source, and not the site
+docs/.astro/
+
+# Local data
+*.sqlite
+*.sqlite3
+*.db
+
 # Playwright
 test-results/
 playwright-report/
