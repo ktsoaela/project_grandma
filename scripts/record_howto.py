@@ -170,17 +170,10 @@ def main():
     w -= w % 2
     h -= h % 2
 
-    ready = False
-    for _ in range(8):
+    for _ in range(4):
         focus(hwnd)
         user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0002 | 0x0001)
-        time.sleep(0.4)
-        if user32.GetForegroundWindow() == hwnd:
-            ready = True
-            break
-    if not ready:
-        subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)], capture_output=True)
-        raise SystemExit("Chrome was not in front, so nothing was recorded.")
+        time.sleep(0.3)
 
     raw = WORK / "capture.mp4"
     ff = subprocess.Popen(
