@@ -3,44 +3,67 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Project Grandma — one step at a time</title>
-  <meta name="description" content="Project Grandma records each click as a step, with a screenshot and a note, then exports a guide anyone can follow." />
+  <title>Project Grandma — show the steps</title>
+  <meta name="description" content="Project Grandma records each click as a step, with a screenshot and a note, then saves a guide anyone can follow." />
   <link rel="icon" href="logo.png" />
   <style>
-    :root { --ink:#2a211c; --muted:#6b5e56; --paper:#fbf7f2; --card:#fff; --line:#eadfd4; --brown:#8d4a32; --deep:#3d291f; }
+    :root {
+      --ink:#1c1917; --muted:#57534e; --paper:#f6f3ee; --card:#fffcf8;
+      --line:#e6dfd6; --accent:#8d4a32; --deep:#292524;
+    }
     * { box-sizing: border-box; }
-    body { margin:0; color:var(--ink); background:var(--paper); font:17px/1.55 "Segoe UI", system-ui, sans-serif; }
-    a { color:var(--deep); }
+    html { scroll-behavior: smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:17px/1.6 "Segoe UI", system-ui, sans-serif; }
+    a { color:inherit; }
     img { max-width:100%; display:block; }
-    .wrap { width:min(1040px, calc(100% - 40px)); margin:0 auto; }
-    header { background:#fff; border-bottom:1px solid var(--line); }
-    .nav { min-height:72px; display:flex; align-items:center; gap:18px; }
-    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:750; color:inherit; }
-    .brand img { width:40px; height:40px; object-fit:contain; }
+    .wrap { width:min(1120px, calc(100% - 48px)); margin:0 auto; }
+    header { position:sticky; top:0; z-index:5; background:rgba(246,243,238,.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+    .nav { min-height:72px; display:flex; align-items:center; gap:22px; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:700; letter-spacing:-.02em; }
+    .brand img { width:36px; height:36px; object-fit:contain; }
     nav a { color:var(--muted); text-decoration:none; font-size:15px; }
-    .end { margin-left:auto; }
-    .btn { display:inline-flex; align-items:center; min-height:44px; padding:0 18px; border-radius:999px; text-decoration:none; font-weight:700; background:var(--deep); color:#fff; }
-    .hero { padding:72px 0 36px; text-align:center; }
-    h1 { margin:0; font-size:clamp(42px, 6vw, 68px); line-height:.98; letter-spacing:-.04em; }
-    h1 span { display:block; color:var(--brown); }
-    .sub { max-width:38em; margin:18px auto 0; color:var(--muted); font-size:19px; }
+    nav a:hover { color:var(--ink); }
+    .end { margin-left:auto; display:flex; gap:10px; align-items:center; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 18px; border-radius:999px; text-decoration:none; font-weight:700; background:var(--deep); color:#fff; }
+    .btn.ghost { background:transparent; color:var(--ink); border:1px solid var(--line); }
+    .hero { display:grid; grid-template-columns:1fr 1.15fr; gap:48px; align-items:center; padding:72px 0 36px; }
+    h1 { margin:0; font-family:Palatino, "Palatino Linotype", Georgia, serif; font-size:clamp(46px, 5.4vw, 76px); line-height:.96; font-weight:500; letter-spacing:-.03em; }
+    h1 span { display:block; color:var(--accent); }
+    .kicker { margin:0 0 14px; color:var(--accent); font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .sub { margin:18px 0 0; color:var(--muted); font-size:18px; max-width:34em; }
+    .hero-actions { display:flex; gap:10px; margin-top:26px; flex-wrap:wrap; }
+    .frame { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:10px; box-shadow:0 24px 60px rgba(41,37,36,.08); }
+    .frame video, .report-frame { width:100%; border-radius:12px; background:#111; }
+    .frame figcaption, .fine { color:var(--muted); font-size:14px; margin:10px 6px 4px; }
+    .strip { display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .strip div { padding:22px 8px; }
+    .strip b { display:block; font-family:Palatino, Georgia, serif; font-size:22px; font-weight:500; }
+    .strip span { color:var(--muted); font-size:14px; }
+    section { padding:72px 0; }
+    h2 { margin:0 0 10px; font-family:Palatino, Georgia, serif; font-size:clamp(32px, 4vw, 48px); font-weight:500; letter-spacing:-.03em; }
+    .lead { color:var(--muted); margin:0 0 28px; max-width:38em; }
     .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-    section { padding:28px 0 64px; }
-    h2 { text-align:center; font-size:34px; letter-spacing:-.03em; margin:0 0 8px; }
-    .lead { text-align:center; color:var(--muted); margin:0 auto 24px; max-width:36em; }
-    .howto { margin:0 0 28px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:10px; }
-    .howto video { width:100%; border-radius:10px; background:#111; }
-    .howto figcaption { color:var(--muted); font-size:14px; margin:10px 4px 4px; }
-    article { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; }
+    article { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 18px 16px; }
     article b { display:block; margin-bottom:4px; }
-    article span, .fine { color:var(--muted); font-size:15px; }
-    .fine { text-align:center; max-width:40em; margin:18px auto 0; }
-    .report-frame { width:100%; height:540px; border:1px solid var(--line); border-radius:16px; background:#fff; }
+    article span { color:var(--muted); font-size:15px; }
+    .exports { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .exports span { border:1px solid var(--line); background:var(--card); border-radius:999px; padding:8px 14px; color:var(--ink); font-size:14px; }
+    .report-frame { height:560px; border:0; background:#fff; }
+    .download { background:var(--deep); color:#f6f3ee; border-radius:28px; padding:48px 40px; }
+    .download h2 { color:#fff; }
+    .download .lead { color:#d6d3d1; }
     .downloads { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .downloads article { display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
-    .downloads .btn { margin-top:8px; }
-    footer { padding:28px 0 40px; color:var(--muted); font-size:14px; text-align:center; }
-    @media (max-width:800px) { .grid, .downloads { grid-template-columns:1fr; } .nav a.hide { display:none; } }
+    .downloads article { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.12); color:#fff; }
+    .downloads span { color:#d6d3d1; }
+    .download .btn { background:#fff; color:var(--deep); }
+    .download .fine { color:#a8a29e; }
+    footer { padding:28px 0 40px; color:var(--muted); font-size:14px; display:flex; justify-content:space-between; gap:12px; }
+    @media (max-width:900px) {
+      .hero, .grid, .strip, .downloads { grid-template-columns:1fr; }
+      .nav a.hide { display:none; }
+      .download { padding:32px 22px; }
+      footer { flex-direction:column; }
+    }
   </style>
 </head>
 <body>
@@ -50,22 +73,37 @@
       <a class="hide" href="#steps">Steps</a>
       <a class="hide" href="#report">Report</a>
       <a class="hide" href="#download">Download</a>
-      <span class="end"><a class="btn" href="https://github.com/ktsoaela/project_grandma">View on GitHub</a></span>
+      <span class="end">
+        <a class="btn ghost hide" href="https://github.com/ktsoaela/project_grandma">GitHub</a>
+        <a class="btn" href="#download">Download</a>
+      </span>
     </div>
   </header>
   <main id="top">
-    <div class="hero wrap">
-      <h1>Show the steps.<span>Not just the result.</span></h1>
-      <p class="sub">A step recorder for explaining a task the way you would to your grandma. Every click becomes a screenshot, a note, and a guide someone else can follow.</p>
+    <div class="wrap hero">
+      <div>
+        <p class="kicker">Step recorder</p>
+        <h1>Show the steps.<span>Not just the result.</span></h1>
+        <p class="sub">Explain a task the way you would to your grandma. Every click becomes a screenshot, a note, and a guide someone else can follow.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#download">Download for Windows</a>
+          <a class="btn ghost" href="#steps">Watch the walkthrough</a>
+        </div>
+      </div>
+      <figure class="frame" id="steps">
+        <video controls playsinline preload="metadata" poster="howto-poster.jpg" src="explainer.mp4"></video>
+        <figcaption>Open the app, click Record, then follow the steps. The voice walks through the same path.</figcaption>
+      </figure>
     </div>
-    <section id="steps">
+    <div class="wrap strip">
+      <div><b>One click</b><span>A new step, in the order you did it.</span></div>
+      <div><b>One picture</b><span>The screen, with a circle on the click.</span></div>
+      <div><b>One guide</b><span>HTML, PDF, Markdown, or video.</span></div>
+    </div>
+    <section>
       <div class="wrap">
         <h2>What it records</h2>
-        <p class="lead">Open Chrome, come to this page, and follow the directions. A voice walks through each one.</p>
-        <figure class="howto">
-          <video controls playsinline preload="metadata" poster="howto-poster.jpg" src="explainer.mp4"></video>
-          <figcaption>Open Chrome, go to this page, click Download, then save the recording and open the report.</figcaption>
-        </figure>
+        <p class="lead">Windows and macOS. You click through the task. Grandma writes the guide.</p>
         <div class="grid">
           <article><b>A step per click</b><span>Each click is a new step, in the order you did it.</span></article>
           <article><b>A screenshot</b><span>The screen is captured so the next person can see what you saw.</span></article>
@@ -74,50 +112,46 @@
           <article><b>A comment</b><span>Add a sentence between steps when the click is not obvious.</span></article>
           <article><b>A guide to share</b><span>Hand someone the result instead of walking them through it again.</span></article>
         </div>
-      </div>
-    </section>
-    <section id="export">
-      <div class="wrap">
-        <h2>Take it with you</h2>
-        <p class="lead">The same recording can leave as a page, a document, notes, or a video.</p>
-        <div class="grid">
-          <article><b>HTML</b><span>An interactive step-by-step page.</span></article>
-          <article><b>PDF</b><span>A printable copy of the steps.</span></article>
-          <article><b>Markdown</b><span>Text with the screenshots embedded.</span></article>
-          <article><b>Video</b><span>An optional MP4 of the actions.</span></article>
-          <article><b>Windows</b><span>Windows 10 and later.</span></article>
-          <article><b>macOS</b><span>macOS 10.12 and later. Screen recording permission is required.</span></article>
+        <div class="exports" id="export" aria-label="Export formats">
+          <span>HTML</span><span>PDF</span><span>Markdown</span><span>Video</span><span>Windows 10+</span><span>macOS 10.12+</span>
         </div>
       </div>
     </section>
     <section id="report">
       <div class="wrap">
         <h2>The report</h2>
-        <p class="lead">This is the document Grandma saves when you click Save. Every step has the time, what was clicked, and the screenshot.</p>
-        <iframe class="report-frame" src="example-report.html" title="Example recorded-steps report"></iframe>
+        <p class="lead">This is the document Grandma saves. Every step has the time, what was clicked, and the screenshot.</p>
+        <div class="frame">
+          <iframe class="report-frame" src="example-report.html" title="Example recorded-steps report"></iframe>
+        </div>
         <p class="fine"><a href="example-report.html">Open the example report</a></p>
       </div>
     </section>
     <section id="download">
       <div class="wrap">
-        <h2>Download</h2>
-        <p class="lead">Click download to use it. Windows gets an exe. Mac gets a disk image.</p>
-        <div class="downloads">
-          <article>
-            <b>Windows</b>
-            <span>Windows 10 or later. The file is Project-Grandma-Setup.exe.</span>
-            <a class="btn" id="dl-win" href="https://github.com/ktsoaela/project_grandma/releases">Download for Windows</a>
-          </article>
-          <article>
-            <b>Mac</b>
-            <span>macOS 10.12 or later. The file is Project-Grandma.dmg.</span>
-            <a class="btn" id="dl-mac" href="https://github.com/ktsoaela/project_grandma/releases">Download for Mac</a>
-          </article>
+        <div class="download">
+          <h2>Click download to use it.</h2>
+          <p class="lead">Windows gets an exe. Mac gets a disk image. Then open the app and click Record.</p>
+          <div class="downloads">
+            <article>
+              <b>Windows</b>
+              <span>Windows 10 or later. The file is Project-Grandma-Setup.exe.</span>
+              <a class="btn" id="dl-win" href="https://github.com/ktsoaela/project_grandma/releases">Download for Windows</a>
+            </article>
+            <article>
+              <b>Mac</b>
+              <span>macOS 10.12 or later. The file is Project-Grandma.dmg.</span>
+              <a class="btn" id="dl-mac" href="https://github.com/ktsoaela/project_grandma/releases">Download for Mac</a>
+            </article>
+          </div>
+          <p class="fine">Both buttons open the GitHub release. Attach Project-Grandma-Setup.exe and Project-Grandma.dmg there.</p>
         </div>
-        <p class="fine">Both buttons open the GitHub release. Attach Project-Grandma-Setup.exe and Project-Grandma.dmg there.</p>
       </div>
     </section>
   </main>
-  <footer>Project Grandma. A step recorder by Khotso Tsoaela.</footer>
+  <footer class="wrap">
+    <span>Project Grandma. A step recorder by Khotso Tsoaela.</span>
+    <a href="https://github.com/ktsoaela/project_grandma">View on GitHub</a>
+  </footer>
 </body>
 </html>
