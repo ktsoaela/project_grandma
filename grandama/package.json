@@ -48,12 +48,15 @@
     ],
     "extraResources": [
       {
+        "from": "../recorder/dist/executable",
+        "to": "recorder"
+      },
+      {
         "from": "../recorder",
         "to": "recorder",
         "filter": [
           "**/*.py",
-          "requirements.txt",
-          "dist/**/*"
+          "requirements.txt"
         ]
       }
     ],
@@ -80,10 +83,11 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Project Grandma"
+      "shortcutName": "Project Grandma",
+      "artifactName": "Project-Grandma-Setup.${ext}"
     },
     "portable": {
-      "artifactName": "${productName}-${version}-portable.exe"
+      "artifactName": "Project-Grandma.${ext}"
     },
     "mac": {
       "target": [
